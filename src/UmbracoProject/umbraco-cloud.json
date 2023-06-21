@@ -1,7 +1,17 @@
 {
   "Deploy": {
     "Project": {
-      "Workspaces": []
+      "Name": "pipelines r us",
+      "Alias": "pipelines-r-us",
+      "Id": "e297a8a0-5e47-4181-9cce-aea04f8fb020",
+      "Workspaces": [
+        {
+          "Id": "c155312e-7f42-4f6b-a856-6eeb27835c6e",
+          "Name": "Live",
+          "Type": "live",
+          "Url": "https://pipelines-r-us.euwest01.umbraco.io"
+        }
+      ]
     },
     "Settings": {}
   },
