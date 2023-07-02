@@ -1,0 +1,68 @@
+name: pipeline
+
+on:
+  push:
+    branches: [ master ]
+    
+env:
+  PATH_TO_CSPROJ: src/UmbracoProject/UmbracoProject.csproj
+  PROJECT_ALIAS: pipelines-r-us
+  CLOUD_KEY: ${{ secrets.API_KEY }}
+      
+jobs:
+#  build:
+#    name: Build and test
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Setup .Net Core
+#        uses: actions/setup-dotnet@v3
+#        with:
+#          dotnet-version: '7.0.x'
+          
+#      - name: Install Dependencies
+#        run: dotnet restore $PATH_TO_CSPROJ
+        
+#      - name: Build
+#        run: dotnet build $PATH_TO_CSPROJ --configuration Release --no-restore
+        
+#      - name: Test
+#        run: dotnet test $PATH_TO_CSPROJ --no-restore --verbosity normal
+        
+  publish:
+    name: Zip and Publish to Cloud
+#    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+#      - name: show Deployment Id  
+#        run: echo "${{ steps.deployment-meta.outputs.DEPLOYMENT_ID}}"
+        
+      - name: build frontend
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14.x
+      - run: npm i && npm run build
+
+      - name: Create Deployment Meta
+        id: deployment-meta
+        run: scripts/create_deployment.sh $PROJECT_ALIAS $CLOUD_KEY "Run number ${{github.run_number}}"
+        shell: bash
+
+      - name: Zip Source Code
+        run: zip -r sources.zip . -x ".git/*" ".github/*" "scripts/*" "src/UmbracoProject/bin/*" "src/UmbracoProject/obj/*" "node_modules/*"
+        shell: bash
+        
+      - name: Post Zipped Artifact
+        run: scripts/upload_package.sh $PROJECT_ALIAS ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $CLOUD_KEY $GITHUB_WORKSPACE/sources.zip
+        shell: bash
+      
+      - name: Request Start Deployment
+        run: scripts/start_deployment.sh $PROJECT_ALIAS ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $CLOUD_KEY
+        shell: bash
+
+      - name: Wait for deployment completed
+        run: scripts/get_deployment_status.sh $PROJECT_ALIAS ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $CLOUD_KEY
+        shell: bash
+      
