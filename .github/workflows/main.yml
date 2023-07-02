@@ -2,7 +2,7 @@ name: pipeline
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
     
 env:
   PATH_TO_CSPROJ: src/UmbracoProject/UmbracoProject.csproj
@@ -39,11 +39,11 @@ jobs:
 #      - name: show Deployment Id  
 #        run: echo "${{ steps.deployment-meta.outputs.DEPLOYMENT_ID}}"
         
-      - name: build frontend
-        uses: actions/setup-node@v3
-        with:
-          node-version: 14.x
-      - run: npm i && npm run build
+#      - name: build frontend
+#        uses: actions/setup-node@v3
+#        with:
+#          node-version: 14.x
+#      - run: npm i && npm run build
 
       - name: Create Deployment Meta
         id: deployment-meta
