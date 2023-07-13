@@ -69,7 +69,3 @@ jobs:
           project-alias: ${{ env.PROJECT_ALIAS }}
           deployment-id: ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }}
           api-key: ${{ secrets.API_KEY }}
-      
-#        run: scripts/get_deployment_status.sh $PROJECT_ALIAS ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $CLOUD_KEY
-#        shell: bash
-      
