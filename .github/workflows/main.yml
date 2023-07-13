@@ -64,7 +64,7 @@ jobs:
       - name: Wait for deployment completed
         uses: jesp209i/uc-deployment-status@v0.1
         with:
-          project-alias: $PROJECT_ALIAS
+          project-alias: ${{ env.PROJECT_ALIAS }}
           deployment-id: ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }}
           api-key: ${{ secrets.API_KEY }}
       
