@@ -47,7 +47,7 @@ jobs:
 
       - name: Create Deployment Meta
         id: deployment-meta
-        uses: jesp209i/uc-prepare-deployment-action@v0.0.5
+        uses: jesp209i/uc-prepare-deployment-action@v0.0.6-beta1
         with:
           project-alias: ${{ env.PROJECT_ALIAS }}
           api-key: ${{ secrets.API_KEY }}
