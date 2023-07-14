@@ -64,6 +64,7 @@ jobs:
       - name: Request Start Deployment
         run: scripts/start_deployment.sh $PROJECT_ALIAS ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $CLOUD_KEY
         shell: bash
+        
       - name: Wait for deployment completed
         uses: jesp209i/uc-deployment-status@v0.1
         with:
