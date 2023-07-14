@@ -47,10 +47,11 @@ jobs:
 
       - name: Create Deployment Meta
         id: deployment-meta
-        uses: jesp209i/uc-prepare-deployment-action@v0.0.6-beta3
+        uses: jesp209i/uc-prepare-deployment-action@v0.0.6-beta4
         with:
           project-alias: ${{ env.PROJECT_ALIAS }}
           api-key: ${{ secrets.API_KEY }}
+          commit-message: "Run number ${{github.run_number}}"
 
       - name: Zip Source Code
         run: zip -r sources.zip . -x ".git/*" ".github/*" "scripts/*" "src/UmbracoProject/bin/*" "src/UmbracoProject/obj/*" "node_modules/*"
