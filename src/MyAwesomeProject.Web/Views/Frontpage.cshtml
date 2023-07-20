@@ -6,9 +6,21 @@
 }
 <html>
 <head>
-<title>new title</title>
+<title>@Model.Value("title")</title>
+<environment include="Development">
+   <link rel="stylesheet" asp-href-include="~/app/assets/main*.css"> <!-- load styles -->
+   <script type="module" defer asp-src-include="~/app/assets/main*.js"></script> 
+  <script type="module" defer src="~/@@vite/client"></script> <!-- load Vite -->
+  <script type="module" defer src="~/main.js"></script> <!-- define the entry point -->
+</environment>
+
+<environment exclude="Development">
+  <!--  ex dev  -->
+   <link rel="stylesheet" asp-href-include="~/app/assets/main*.css"> <!-- load styles -->
+   <script type="module" defer asp-src-include="~/app/assets/main*.js"></script> <!-- load Vite build output -->
+</environment>
 </head>
 <body>
-<h1>@Model.Value("title")</h1>
+	<div id="app">@Model.Value("title")</div>
 </body>
 </html>
