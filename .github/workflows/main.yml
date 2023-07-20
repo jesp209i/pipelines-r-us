@@ -39,11 +39,11 @@ jobs:
 #      - name: show Deployment Id  
 #        run: echo "${{ steps.deployment-meta.outputs.DEPLOYMENT_ID}}"
         
-#      - name: build frontend
-#        uses: actions/setup-node@v3
-#        with:
-#          node-version: 14.x
-#      - run: npm i && npm run build
+      - name: build frontend
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14.x
+      - run: npm i && npm run build
 
       - name: Create Deployment Meta
         id: deployment-meta
@@ -54,7 +54,7 @@ jobs:
           commit-message: "Run number ${{github.run_number}}"
 
       - name: Zip Source Code
-        run: zip -r sources.zip . -x ".git/*" ".github/*" "scripts/*" "src/UmbracoProject/bin/*" "src/UmbracoProject/obj/*" "node_modules/*"
+        run: zip -r sources.zip . -x ".git/*" ".github/*" "scripts/*" "src/MyAwesomeProject.Code/bin/*" "src/MyAwesomeProject.Code/obj/*" "src/MyAwesomeProject.Web/bin/*" "src/MyAwesomeProject.Web/obj/*" "node_modules/*"
         shell: bash
         
       - name: Post Zipped Artifact
