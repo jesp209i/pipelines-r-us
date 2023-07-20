@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C4530AE8-B35
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyAwesomeProject.Code", "src\MyAwesomeProject.Code\MyAwesomeProject.Code.csproj", "{C612FC45-2082-41CE-B966-02DA9C51B7C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UmbracoProject", "src\UmbracoProject\UmbracoProject.csproj", "{D7738C93-AABE-4D52-910F-ED767C078FA0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyAwesomeProject.Web", "src\MyAwesomeProject.Web\MyAwesomeProject.Web.csproj", "{D7738C93-AABE-4D52-910F-ED767C078FA0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
