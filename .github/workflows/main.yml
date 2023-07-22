@@ -66,8 +66,11 @@ jobs:
         shell: bash
       
       - name: Request Start Deployment
-        run: scripts/start_deployment.sh $PROJECT_ALIAS ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $CLOUD_KEY
-        shell: bash
+        uses: jesp209i/uc-start-deployment@v0.1-beta1
+        with:
+          project-alias: ${{ env.PROJECT_ALIAS }}
+          deployment-id: ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }}
+          api-key: ${{ secrets.API_KEY }}
         
       - name: Wait for deployment completed
         uses: jesp209i/uc-deployment-status@v0.2-beta2
