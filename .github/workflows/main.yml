@@ -70,9 +70,9 @@ jobs:
         shell: bash
         
       - name: Wait for deployment completed
-        uses: jesp209i/uc-deployment-status@v0.2-beta1
+        uses: jesp209i/uc-deployment-status@v0.2-beta2
         with:
           project-alias: ${{ env.PROJECT_ALIAS }}
           deployment-id: ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }}
           api-key: ${{ secrets.API_KEY }}
-          timeout-seconds: 660
+          timeout-seconds: 600
