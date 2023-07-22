@@ -66,12 +66,12 @@ jobs:
     #    shell: bash
       
       - name: Upload Zipped Artifact
-        uses: jesp209i/uc-upload-deployment@v0.1-beta2
+        uses: jesp209i/uc-upload-deployment@v0.1-beta3
         with:
           project-alias: ${{ env.PROJECT_ALIAS }}
           deployment-id: ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }}
           api-key: ${{ secrets.API_KEY }}
-          file-path: "${{ github.workspace}}/sources.zip"
+          file-path: "${{ github.workspace }}/sources.zip"
       
       - name: Request Start Deployment
         uses: jesp209i/uc-start-deployment@v0.1-beta2
