@@ -34,13 +34,10 @@ jobs:
 #    needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      
-#      - name: show Deployment Id  
-#        run: echo "${{ steps.deployment-meta.outputs.DEPLOYMENT_ID}}"
-        
       - name: build frontend
-        uses: actions/setup-node@v3
+        uses: actions/checkout@v3
+      
+      - uses: actions/setup-node@v3
         with:
           node-version: 14.x
       - run: npm i && npm run build
@@ -58,12 +55,8 @@ jobs:
         shell: bash
 
       - name: Zip Source Code
-        run: zip -r sources.zip . -x ".git/*" ".github/*" "scripts/*" "src/MyAwesomeProject.Code/bin/*" "src/MyAwesomeProject.Code/obj/*" "src/MyAwesomeProject.Web/bin/*" "src/MyAwesomeProject.Web/obj/*" "node_modules/*"
+        run: zip -r sources.zip . -x ".git/*" ".github/*" "src/MyAwesomeProject.Code/bin/*" "src/MyAwesomeProject.Code/obj/*" "src/MyAwesomeProject.Web/bin/*" "src/MyAwesomeProject.Web/obj/*" "node_modules/*"
         shell: bash
-        
-    #  - name: Post Zipped Artifact
-    #    run: scripts/upload_package.sh $PROJECT_ALIAS ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $CLOUD_KEY ${{ github.workspace }}/sources.zip    
-    #    shell: bash
       
       - name: Upload Zipped Artifact
         uses: jesp209i/uc-upload-deployment@v0.2-beta3
@@ -71,7 +64,7 @@ jobs:
           project-alias: ${{ env.PROJECT_ALIAS }}
           deployment-id: ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }}
           api-key: ${{ secrets.API_KEY }}
-          file-path: "${{ github.workspace }}/sources.zip"
+          file-path: "${{ github.workspace }}/badsources.zip"
       
       - name: Request Start Deployment
         uses: jesp209i/uc-start-deployment@v0.1-beta2
