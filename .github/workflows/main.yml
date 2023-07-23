@@ -61,17 +61,17 @@ jobs:
         run: zip -r sources.zip . -x ".git/*" ".github/*" "scripts/*" "src/MyAwesomeProject.Code/bin/*" "src/MyAwesomeProject.Code/obj/*" "src/MyAwesomeProject.Web/bin/*" "src/MyAwesomeProject.Web/obj/*" "node_modules/*"
         shell: bash
         
-    #  - name: Post Zipped Artifact
-    #    run: scripts/upload_package.sh $PROJECT_ALIAS ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $CLOUD_KEY $GITHUB_WORKSPACE/sources.zip
-    #    shell: bash
+      - name: Post Zipped Artifact
+        run: scripts/upload_package.sh $PROJECT_ALIAS ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $CLOUD_KEY $GITHUB_WORKSPACE/sources.zip
+        shell: bash
       
-      - name: Upload Zipped Artifact
-        uses: jesp209i/uc-upload-deployment@v0.2-beta1
-        with:
-          project-alias: ${{ env.PROJECT_ALIAS }}
-          deployment-id: ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }}
-          api-key: ${{ secrets.API_KEY }}
-          file-path: "${{ github.workspace }}/sources.zip"
+    #  - name: Upload Zipped Artifact
+    #    uses: jesp209i/uc-upload-deployment@v0.2-beta1
+    #    with:
+    #      project-alias: ${{ env.PROJECT_ALIAS }}
+    #      deployment-id: ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }}
+    #      api-key: ${{ secrets.API_KEY }}
+    #      file-path: "${{ github.workspace }}/sources.zip"
       
       - name: Request Start Deployment
         uses: jesp209i/uc-start-deployment@v0.1-beta2
