@@ -66,7 +66,7 @@ jobs:
     #    shell: bash
       
       - name: Upload Zipped Artifact
-        uses: jesp209i/uc-upload-deployment@v0.1-beta10
+        uses: jesp209i/uc-upload-deployment@v0.1-beta11
         with:
           project-alias: ${{ env.PROJECT_ALIAS }}
           deployment-id: ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }}
