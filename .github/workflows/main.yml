@@ -62,7 +62,10 @@ jobs:
         shell: bash
         
       - name: Post Zipped Artifact
-        run: scripts/upload_package.sh $PROJECT_ALIAS ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $CLOUD_KEY $GITHUB_WORKSPACE/sources.zip
+    #    run: scripts/upload_package.sh $PROJECT_ALIAS ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $CLOUD_KEY $GITHUB_WORKSPACE/sources.zip
+        run: scripts/upload_package.sh $PROJECT_ALIAS ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $CLOUD_KEY $GITHUB_WORKSPACE/nosources.zip
+    #    run: scripts/upload_package.sh $PROJECT_ALIAS ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $CLOUD_KEY ${{ github.workspace }}/sources.zip
+        
         shell: bash
       
     #  - name: Upload Zipped Artifact
