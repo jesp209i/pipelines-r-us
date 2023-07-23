@@ -8,7 +8,7 @@ apiKey="$3"
 file="$4"
 
 function call_api {
-  if [[ -f $file]]
+  if [[ -f "$file" ]]
   then 
     response=$(curl -i -s -X POST $url \
       -H "Umbraco-Api-Key: $apiKey" \
