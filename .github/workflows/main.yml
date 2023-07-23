@@ -41,7 +41,7 @@ jobs:
         uses: jesp209i/uc-changes-since-last-deployment@v0.1-beta1
         with:
           project-alias: ${{ env.PROJECT_ALIAS }}
-          deployment-id: ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }}
+          api-key: ${{ secrets.API_KEY }}
           workspace: ${{ github.workspace }}
 
   publish:
