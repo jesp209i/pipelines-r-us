@@ -28,10 +28,25 @@ jobs:
         
 #      - name: Test
 #        run: dotnet test $PATH_TO_CSPROJ --no-restore --verbosity normal
-        
+  preflight:
+    name: Cloud changes check
+    runs-on: ubunto-latest
+    steps:
+      - name: yolo
+        uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 14.x
+      - name: mooloo
+        uses: jesp209i/uc-changes-since-last-deployment@v0.1-beta1
+        with:
+          project-alias: ${{ env.PROJECT_ALIAS }}
+          deployment-id: ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }}
+          workspace: ${{ github.workspace }}
+
   publish:
-    name: Zip and Publish to Cloud
-#    needs: build
+    name: Publish to Cloud
+    needs: preflight
     runs-on: ubuntu-latest
     steps:
       - name: build frontend
