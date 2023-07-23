@@ -29,8 +29,8 @@ jobs:
 #      - name: Test
 #        run: dotnet test $PATH_TO_CSPROJ --no-restore --verbosity normal
   preflight:
-    name: Cloud changes check
-    runs-on: ubunto-latest
+    name: Deployment Preflight Check
+    runs-on: ubuntu-latest
     steps:
       - name: yolo
         uses: actions/checkout@v3
