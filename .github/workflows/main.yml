@@ -35,17 +35,15 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 14.x
-      - name: Check for changes in Cloud
+      - name: Check for changes in Cloud 
         id: cloud-changes
-        uses: jesp209i/uc-changes-since-last-deployment@v0.1-beta19
+        uses: jesp209i/uc-changes-since-last-deployment@v0.1-beta20
         with:
           project-alias: ${{ env.PROJECT_ALIAS }}
           api-key: ${{ secrets.API_KEY }}
           workspace: ${{ github.workspace }}
-      - name: Apply Diffs
-        if: steps.cloud-changes.outputs.REMOTE_CHANGES == 'true'
-        run: cat ${{ steps.cloud-changes.outputs.PATCH_FILE }}
-        shell: bash
+          github-pat-token: ${{ secrets.GITHUB_TOKEN }}
+          pipeline-run: ${{github.run_number}}
 
 #  publish:
 #    name: Publish to Cloud
