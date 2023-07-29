@@ -417,3 +417,5 @@ healthchecksdb
 
 # Ignore js build assets
 **/wwwroot/app/
+# Ignore auto applied git patches
+/download/git-changes.patch
