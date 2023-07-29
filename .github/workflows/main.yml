@@ -32,17 +32,21 @@ jobs:
     name: Deployment Preflight Check
     runs-on: ubuntu-latest
     steps:
-      - name: yolo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 14.x
-      - name: mooloo
+      - name: Check for changes in Cloud
+        id: cloud-changes
         uses: jesp209i/uc-changes-since-last-deployment@v0.1-beta7
         with:
           project-alias: ${{ env.PROJECT_ALIAS }}
           api-key: ${{ secrets.API_KEY }}
           workspace: ${{ github.workspace }}
+      - name: Apply Diffs
+        if: steps.cloud-changes.output.remote-changes == 'true'
+        run: sh echo ${steps.cloud-changes.outputs.git-patch-file}
+        shell: bash
 
   publish:
     name: Publish to Cloud
