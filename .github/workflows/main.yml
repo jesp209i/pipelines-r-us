@@ -7,7 +7,6 @@ on:
 env:
   PATH_TO_CSPROJ: src/UmbracoProject/UmbracoProject.csproj
   PROJECT_ALIAS: pipelines-r-us
-  CLOUD_KEY: ${{ secrets.API_KEY }}
       
 jobs:
 #  build:
@@ -38,14 +37,14 @@ jobs:
           node-version: 14.x
       - name: Check for changes in Cloud
         id: cloud-changes
-        uses: jesp209i/uc-changes-since-last-deployment@v0.1-beta18
+        uses: jesp209i/uc-changes-since-last-deployment@v0.1-beta19
         with:
           project-alias: ${{ env.PROJECT_ALIAS }}
           api-key: ${{ secrets.API_KEY }}
           workspace: ${{ github.workspace }}
       - name: Apply Diffs
-        if: steps.cloud-changes.output.remote-changes == 'true'
-        run: sh echo ${steps.cloud-changes.outputs.git-patch-file}
+        if: steps.cloud-changes.outputs.REMOTE_CHANGES == 'true'
+        run: sh echo ${steps.cloud-changes.outputs.PATCH_FILE}
         shell: bash
 
 #  publish:
