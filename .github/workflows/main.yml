@@ -44,7 +44,7 @@ jobs:
           workspace: ${{ github.workspace }}
       - name: Apply Diffs
         if: steps.cloud-changes.outputs.REMOTE_CHANGES == 'true'
-        run: sh echo ${steps.cloud-changes.outputs.PATCH_FILE}
+        run: sh echo ${{ steps.cloud-changes.outputs.PATCH_FILE }}
         shell: bash
 
 #  publish:
