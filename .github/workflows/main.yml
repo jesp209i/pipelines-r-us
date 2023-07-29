@@ -38,7 +38,7 @@ jobs:
         with:
           node-version: 14.x
       - name: mooloo
-        uses: jesp209i/uc-changes-since-last-deployment@v0.1-beta4
+        uses: jesp209i/uc-changes-since-last-deployment@v0.1-beta5
         with:
           project-alias: ${{ env.PROJECT_ALIAS }}
           api-key: ${{ secrets.API_KEY }}
