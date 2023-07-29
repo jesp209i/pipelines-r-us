@@ -38,7 +38,7 @@ jobs:
           node-version: 14.x
       - name: Check for changes in Cloud
         id: cloud-changes
-        uses: jesp209i/uc-changes-since-last-deployment@v0.1-beta13
+        uses: jesp209i/uc-changes-since-last-deployment@v0.1-beta14
         with:
           project-alias: ${{ env.PROJECT_ALIAS }}
           api-key: ${{ secrets.API_KEY }}
