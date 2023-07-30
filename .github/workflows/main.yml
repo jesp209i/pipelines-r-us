@@ -43,21 +43,24 @@ jobs:
           api-key: ${{ secrets.API_KEY }}
           workspace: ${{ github.workspace }}
 
-#      - name: apply changes
-#        if: steps.cloud-changes.outputs.REMOTE_CHANGES == 'true'
-#        run: |
-#          git config user.name "Build pipeline"
-#          git config user.email jam@umbraco.dk
-#          git switch -c auto/merge_remote_changes_for_${{github.run_number}}
-#          git apply -v ${{steps.cloud-changes.outputs.PATCH_FILE}}
-#          git add -A
-#          git commit -m "Auto updated changes from remote for build ${{github.run_number}}" .
-#          git push --set-upstream origin auto/merge_remote_changes_for_${{github.run_number}}
-#        shell: bash
-      
+      - name: apply changes to new branch
+        id: make-branch-changes
+        if: steps.cloud-changes.outputs.REMOTE_CHANGES == 'true'
+        run: |
+          git config user.name "Build pipeline"
+          git config user.email jam@umbraco.dk
+          git switch -c auto/merge_remote_changes_for_${{github.run_number}}
+          git apply -v ${{steps.cloud-changes.outputs.PATCH_FILE}}
+          git add -A
+          git commit -m "Auto updated changes from remote for build ${{github.run_number}}" .
+          git push --set-upstream origin auto/merge_remote_changes_for_${{github.run_number}}
+          echo "Please take a look at the new branch: auto/merge_remote_changes_for_${{github.run_number}}"
+        shell: bash
+     
   publish:
     name: Publish to Cloud
     needs: preflight
+    if: ${{ failure() }} || needs.preflight.steps.cloud-changes.outputs.REMOTE_CHANGES == 'false'
     runs-on: ubuntu-latest
     steps:
       - name: build frontend
