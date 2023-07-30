@@ -56,11 +56,13 @@ jobs:
           git push --set-upstream origin auto/merge_remote_changes_for_${{github.run_number}}
           echo "Please take a look at the new branch: auto/merge_remote_changes_for_${{github.run_number}}"
         shell: bash
+    outputs:
+      remote-changes: ${{ steps.cloud-changes.outputs.REMOTE_CHANGES}}
      
   publish:
     name: Publish to Cloud
     needs: preflight
-    if: ${{ failure() }} || needs.preflight.steps.cloud-changes.outputs.REMOTE_CHANGES == 'false'
+    if: needs.preflight.outputs.remote-changes == 'false'
     runs-on: ubuntu-latest
     steps:
       - name: build frontend
