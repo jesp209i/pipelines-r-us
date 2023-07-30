@@ -37,14 +37,26 @@ jobs:
           node-version: 14.x
       - name: Check for changes in Cloud 
         id: cloud-changes
-        uses: jesp209i/uc-changes-since-last-deployment@v0.1-beta24
+        uses: jesp209i/uc-changes-since-last-deployment@v0.1-beta25
         with:
           project-alias: ${{ env.PROJECT_ALIAS }}
           api-key: ${{ secrets.API_KEY }}
           workspace: ${{ github.workspace }}
-          github-pat-token: ${{ secrets.GITHUB_TOKEN }}
-          pipeline-run: ${{github.run_number}}
+#          github-pat-token: ${{ secrets.GITHUB_TOKEN }}
+#          pipeline-run: ${{github.run_number}}
 
+      - name: apply changes
+        if: steps.cloud-changes.outputs.REMOTE_CHANGES == 'true'
+        run: |
+          git config user.name "Build pipeline"
+          git config user.email jam+cicd@umbraco.com
+          git switch -c auto/merge_remote_changes_for_$(github.run_number)
+          git apply -v $(steps.cloud-changes.outputs.PATCH_FILE)
+          git commit -a -m "Auto updated changes from remote for build $(github.run_number)" .
+          git remote add tmp-pusher https://github.com/jesp209i/pipelines-r-us
+          git push --set-upstream tmp-pusher auto/merge_remote_changes_for_$(github.run_number)
+        shell: bash
+      
 #  publish:
 #    name: Publish to Cloud
 #    needs: preflight
