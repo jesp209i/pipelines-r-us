@@ -49,7 +49,7 @@ jobs:
         if: steps.cloud-changes.outputs.REMOTE_CHANGES == 'true'
         run: |
           git config user.name "Build pipeline"
-          git config user.email jam+cicd@umbraco.com
+          git config user.email jam@umbraco.dk
           git switch -c auto/merge_remote_changes_for_${{github.run_number}}
           git apply -v ${{steps.cloud-changes.outputs.PATCH_FILE}}
           git add -A
