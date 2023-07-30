@@ -54,7 +54,7 @@ jobs:
           git apply -v ${{steps.cloud-changes.outputs.PATCH_FILE}}
           git add -A
           git commit -m "Auto updated changes from remote for build ${{github.run_number}}" .
-          git remote add tmp-pusher https://github.com/jesp209i/pipelines-r-us
+          git remote add tmp-pusher https://${{ github.token }}@github.com/jesp209i/pipelines-r-us
           git push --set-upstream tmp-pusher auto/merge_remote_changes_for_${{github.run_number}}
         shell: bash
       
