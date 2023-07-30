@@ -1,0 +1,9 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.NewDocType>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@{
+	Layout = null;
+}
+<h1>Hier ist ein paar Änderungen</h1>
+<h2>@Model.Value("title")</h2>
+<div>@Model.Value("text")</div>
