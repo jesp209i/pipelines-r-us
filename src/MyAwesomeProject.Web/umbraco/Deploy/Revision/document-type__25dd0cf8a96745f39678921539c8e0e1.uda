@@ -19,9 +19,7 @@
     "AllowVaryingBySegment": false,
     "AllowedAtRoot": true,
     "IsElementType": false,
-    "AllowedChildContentTypes": [
-      "umb://document-type/18253134e54943bfb455128fc179292e"
-    ]
+    "AllowedChildContentTypes": []
   },
   "Parent": null,
   "CompositionContentTypes": [],
@@ -60,11 +58,6 @@
     {
       "Udi": "umb://data-type/0cc0eba1996042c9bf9b60e150b429ae",
       "Ordering": true,
-      "Mode": 0
-    },
-    {
-      "Udi": "umb://document-type/18253134e54943bfb455128fc179292e",
-      "Ordering": false,
       "Mode": 0
     },
     {
