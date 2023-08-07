@@ -104,7 +104,7 @@ jobs:
           api-key: ${{ secrets.API_KEY }}
         
       - name: Wait for deployment completed
-        uses: jesp209i/uc-deployment-status@v0.2-beta9
+        uses: jesp209i/uc-deployment-status@v0.2-beta10
         with:
           project-alias: ${{ env.PROJECT_ALIAS }}
           deployment-id: ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }}
