@@ -27,42 +27,42 @@ jobs:
         
 #      - name: Test
 #        run: dotnet test $PATH_TO_CSPROJ --no-restore --verbosity normal
-  preflight:
-    name: Deployment Preflight Check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 14.x
-      - name: Check for changes in Cloud 
-        id: cloud-changes
-        uses: jesp209i/uc-changes-since-last-deployment@v0.1-beta25
-        with:
-          project-alias: ${{ env.PROJECT_ALIAS }}
-          api-key: ${{ secrets.API_KEY }}
-          workspace: ${{ github.workspace }}
-
-      - name: apply changes to new branch
-        id: make-branch-changes
-        if: steps.cloud-changes.outputs.REMOTE_CHANGES == 'true'
-        run: |
-          git config user.name "Build pipeline"
-          git config user.email jam@umbraco.dk
-          git switch -c auto/merge_remote_changes_for_${{github.run_number}}
-          git apply -v ${{steps.cloud-changes.outputs.PATCH_FILE}}
-          git add -A
-          git commit -m "Auto updated changes from remote for build ${{github.run_number}}" .
-          git push --set-upstream origin auto/merge_remote_changes_for_${{github.run_number}}
-          echo "Please take a look at the new branch: auto/merge_remote_changes_for_${{github.run_number}}"
-        shell: bash
-    outputs:
-      remote-changes: ${{ steps.cloud-changes.outputs.REMOTE_CHANGES}}
+#  preflight:
+#    name: Deployment Preflight Check
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#      - uses: actions/setup-node@v3
+#        with:
+#          node-version: 14.x
+#      - name: Check for changes in Cloud 
+#        id: cloud-changes
+#        uses: jesp209i/uc-changes-since-last-deployment@v0.1-beta25
+#        with:
+#          project-alias: ${{ env.PROJECT_ALIAS }}
+#          api-key: ${{ secrets.API_KEY }}
+#          workspace: ${{ github.workspace }}
+#
+#      - name: apply changes to new branch
+#        id: make-branch-changes
+#        if: steps.cloud-changes.outputs.REMOTE_CHANGES == 'true'
+#        run: |
+#          git config user.name "Build pipeline"
+#          git config user.email jam@umbraco.dk
+#          git switch -c auto/merge_remote_changes_for_${{github.run_number}}
+#          git apply -v ${{steps.cloud-changes.outputs.PATCH_FILE}}
+#          git add -A
+#          git commit -m "Auto updated changes from remote for build ${{github.run_number}}" .
+#          git push --set-upstream origin auto/merge_remote_changes_for_${{github.run_number}}
+#          echo "Please take a look at the new branch: auto/merge_remote_changes_for_${{github.run_number}}"
+#        shell: bash
+#    outputs:
+#      remote-changes: ${{ steps.cloud-changes.outputs.REMOTE_CHANGES}}
      
   publish:
     name: Publish to Cloud
-    needs: preflight
-    if: needs.preflight.outputs.remote-changes == 'false'
+#    needs: preflight
+#    if: needs.preflight.outputs.remote-changes == 'false'
     runs-on: ubuntu-latest
     steps:
       - name: build frontend
