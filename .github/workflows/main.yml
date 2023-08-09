@@ -88,8 +88,8 @@ jobs:
         run: zip -r sources.zip . -x ".git/*" ".github/*" "src/MyAwesomeProject.Code/bin/*" "src/MyAwesomeProject.Code/obj/*" "src/MyAwesomeProject.Web/bin/*" "src/MyAwesomeProject.Web/obj/*" "node_modules/*"
         shell: bash
      
-      - name: Upload Zipped Artifact
-        uses: jesp209i/uc-upload-deployment@v0.3-beta1
+      - name: Upload Artifact
+        uses: jesp209i/uc-upload-deployment@v0.3-beta2
         with:
           project-alias: ${{ env.PROJECT_ALIAS }}
           deployment-id: ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }}
