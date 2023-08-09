@@ -89,7 +89,7 @@ jobs:
         shell: bash
      
       - name: Upload Artifact
-        uses: jesp209i/uc-upload-deployment@v0.3-beta2
+        uses: jesp209i/uc-upload-deployment@v0.3-beta3
         with:
           project-alias: ${{ env.PROJECT_ALIAS }}
           deployment-id: ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }}
