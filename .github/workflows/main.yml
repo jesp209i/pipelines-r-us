@@ -82,10 +82,10 @@ jobs:
           commit-message: "Run number ${{github.run_number}}"
 
       - name: Prepare Cloud Git Ignore
-        run: cp .cloudgitignore .gitignore
+        run: cp cloud.gitignore .gitignore
         shell: bash
       - name: Zip Source Code
-        run: zip -r sources.zip . -x ".git/*" ".github/*" "src/MyAwesomeProject.Code/bin/*" "src/MyAwesomeProject.Code/obj/*" "src/MyAwesomeProject.Web/bin/*" "src/MyAwesomeProject.Web/obj/*" "node_modules/*"
+        run: zip -r sources.zip . -x@zip.ignore
         shell: bash
      
       - name: Upload Artifact
