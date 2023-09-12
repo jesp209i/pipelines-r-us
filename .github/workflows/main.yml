@@ -4,7 +4,7 @@ on:
   push:
     branches:
      - main
-     - using_project_id
+     - using_project-id
 
 env:
   projectId: ${{ vars.PROJECT_ID }}
