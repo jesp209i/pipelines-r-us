@@ -1,6 +1,8 @@
 name: pipeline
 
-on: workflow_dispatch
+on:
+  push:
+    branches: [ main, using_project_id ]
 
 env:
   projectId: ${{ vars.PROJECT_ID }}
