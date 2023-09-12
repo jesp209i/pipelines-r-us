@@ -2,8 +2,9 @@ name: pipeline
 
 on:
   push:
-    branches: [ main, using_project_id ]
-    
+    branches:
+     - main
+     - using_project_id
 
 env:
   projectId: ${{ vars.PROJECT_ID }}
