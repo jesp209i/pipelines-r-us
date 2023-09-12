@@ -9,8 +9,6 @@ commitMessage="$3"
 # Define function to call API to create a new deployment
 function call_api {
   echo "Posting to $url with commit message: $commitMessage"
-  echo "Did I get a projectId: $projectId"
-  echo "Did I get a secret: $apiKey"
   response=$(curl --insecure -s -X POST $url \
     -H "Umbraco-Cloud-Api-Key: $apiKey" \
     -H "Content-Type: application/json" \

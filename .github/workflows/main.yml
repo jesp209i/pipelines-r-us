@@ -7,7 +7,7 @@ on:
      - using_project-id
 
 env:
-  projectId: ${{ secrets.PROJECT_ID }}
+  projectId: ${{ vars.PROJECT_ID }}
   umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
 
 jobs:
