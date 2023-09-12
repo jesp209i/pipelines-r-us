@@ -3,6 +3,7 @@ name: pipeline
 on:
   push:
     branches: [ main, using_project_id ]
+    
 
 env:
   PATH_TO_CSPROJ: src/UmbracoProject/UmbracoProject.csproj
