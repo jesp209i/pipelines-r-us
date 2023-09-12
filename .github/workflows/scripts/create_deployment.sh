@@ -29,4 +29,4 @@ call_api
 echo "Deployment created successfully -> $deployment_id"
 
 # store deploymentId for later stages
-echo "##vso[task.setvariable variable=deploymentId;]$deployment_id"
+echo "DEPLOYMENT_ID=$deployment_id" >> "$GITHUB_OUTPUT"

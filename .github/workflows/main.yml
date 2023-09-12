@@ -20,7 +20,7 @@ jobs:
 
       - name: Create Deployment Meta
         id: deployment-meta
-        run: scripts/create_deployment.sh $projectId $umbracoCloudApiKey "Run number ${{github.run_number}}"
+        run: $GITHUB_WORKSPACE/.github/workflows/scripts/create_deployment.sh $projectId $umbracoCloudApiKey "Run number ${{github.run_number}}"
         shell: bash
 
       - name: Zip Source Code
@@ -28,13 +28,13 @@ jobs:
         shell: bash
 
       - name: Post Zipped Artifact
-        run: scripts/upload_package.sh $projectId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $umbracoCloudApiKey $GITHUB_WORKSPACE/sources.zip
+        run: $GITHUB_WORKSPACE/.github/workflows/scripts/upload_package.sh $projectId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $umbracoCloudApiKey $GITHUB_WORKSPACE/sources.zip
         shell: bash
 
       - name: Request Start Deployment
-        run: scripts/start_deployment.sh $projectId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $umbracoCloudApiKey
+        run: $GITHUB_WORKSPACE/.github/workflows/scripts/start_deployment.sh $projectId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $umbracoCloudApiKey
         shell: bash
 
       - name: Wait for deployment completed
-        run: scripts/get_deployment_status.sh $projectId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $umbracoCloudApiKey
+        run: $GITHUB_WORKSPACE/.github/workflows/scripts/get_deployment_status.sh $projectId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $umbracoCloudApiKey
         shell: bash
