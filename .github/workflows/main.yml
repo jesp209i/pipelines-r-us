@@ -2,8 +2,8 @@ name: pipeline
 
 on:
   push:
-    branches: [ main ]
-    
+    branches: [ main, using_project_id ]
+
 env:
   PATH_TO_CSPROJ: src/UmbracoProject/UmbracoProject.csproj
   PROJECT_ALIAS: pipelines-r-us
