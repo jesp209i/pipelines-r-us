@@ -1,6 +1,0 @@
-.git/*
-.github/*
-**/[Bb]in/*
-**/[Oo]bj/*
-node_modules*
-zip.ignore

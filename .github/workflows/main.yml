@@ -86,7 +86,7 @@ jobs:
         run: cp cloud.gitignore .gitignore
         shell: bash
       - name: Zip Source Code
-        run: zip -r sources.zip . -x@zip.ignore
+        run: zip -r sources.zip . -x@.zipignore
         shell: bash
      
       - name: Upload Artifact
