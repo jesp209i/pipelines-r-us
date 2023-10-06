@@ -36,5 +36,5 @@ jobs:
         shell: bash
 
       - name: Wait for deployment completed
-        run: $GITHUB_WORKSPACE/.github/workflows/scripts/get_deployment_status.sh $projectId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $umbracoCloudApiKey
-        shell: bash
+        run: $GITHUB_WORKSPACE/.github/workflows/ps/get_deployment_status.ps1 https://api.cloud.umbraco.com $projectId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $umbracoCloudApiKey
+        shell: pwsh
