@@ -1,7 +1,9 @@
-$BaseUrl = $args[0]
-$ProjectId = $args[1]
-$DeploymentId = $args[2]
-$ApiKey = $args[3]
+param(
+    $BaseUrl,
+    $ProjectId,
+    $DeploymentId,
+    $ApiKey
+)
 
 $TimeoutSeconds = 1200
 $timer = [Diagnostics.Stopwatch]::StartNew()
@@ -13,13 +15,14 @@ $Headers = @{
 $Url = "$BaseUrl/v1/projects/$ProjectId/deployments/$DeploymentId"
 
 function Get-Deployment-Status ([INT]$Run){
+    Write-Host "Run $Run"
     $Response = Invoke-RestMethod -URI $Url -Headers $Headers 
     if ($Response.statusCode -eq 200) {
-        Write-Host "Run $Run " #$Response.updateMessage"
-        Write-Host $timer.Elapsed.TotalSeconds ($timer.Elapsed.TotalSeconds -lt $TimeoutSeconds)
+        Write-Host $Response.updateMessage
         return $Response.deploymentState
     }
-    throw "Unexpected Response ($Response.statusCode) from Api. Message: $Response.message"
+
+    throw "Unexpected Response from Api"
 }
 
 while ($timer.Elapsed.TotalSeconds -lt $TimeoutSeconds) {
