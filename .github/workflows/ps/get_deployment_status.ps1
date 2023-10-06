@@ -14,9 +14,12 @@ $Url = "$BaseUrl/v1/projects/$ProjectId/deployments/$DeploymentId"
 
 function Get-Deployment-Status ([INT]$Run){
     $Response = Invoke-RestMethod -URI $Url -Headers $Headers 
-    Write-Host "Run $Run " #$Response.updateMessage"
-    Write-Host $timer.Elapsed.TotalSeconds ($timer.Elapsed.TotalSeconds -lt $TimeoutSeconds)
-    return $Response.deploymentState
+    if ($Response.statusCode -eq 200) {
+        Write-Host "Run $Run " #$Response.updateMessage"
+        Write-Host $timer.Elapsed.TotalSeconds ($timer.Elapsed.TotalSeconds -lt $TimeoutSeconds)
+        return $Response.deploymentState
+    }
+    throw "Unexpected Response ($Response.statusCode) from Api. Message: $Response.message"
 }
 
 while ($timer.Elapsed.TotalSeconds -lt $TimeoutSeconds) {
