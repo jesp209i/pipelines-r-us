@@ -26,7 +26,7 @@ function Create-Deployment {
 
         Write-Host $Response.updateMessage
 
-        Write-Output "DEPLOYMENT_ID=$($DeploymentId)" >> $GITHUB_OUTPUT
+        "DEPLOYMENT_ID=$($DeploymentId)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
 
         Write-Host "Deployment Created Successfully => $($DeploymentId)"
         return
