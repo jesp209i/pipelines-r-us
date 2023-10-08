@@ -16,10 +16,13 @@ $Url = "$BaseUrl/v1/projects/$ProjectId/deployments/$DeploymentId"
 
 function Get-Deployment-Status ([INT]$Run){
     Write-Host "Run $Run"
-    $Response = Invoke-RestMethod -URI $Url -Headers $Headers 
-    if ($Response.statusCode -eq 200) {
-        Write-Host $Response.updateMessage
-        return $Response.deploymentState
+    $Response = Invoke-WebRequest -URI $Url -Headers $Headers 
+    if ($Response.StatusCode -eq 200) {
+
+        $JsonResponse = ConvertFrom-Json $([String]::new($response.Content))
+
+        Write-Host $JsonResponse.updateMessage
+        return $JsonResponse.deploymentState
     }
 
     throw "Unexpected Response from Api"
