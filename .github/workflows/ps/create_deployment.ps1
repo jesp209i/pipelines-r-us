@@ -12,7 +12,7 @@ $Headers = @{
 
 $Body = @{
     'commitMessage' = $CommitMessage
-}
+} | ConvertTo-Json
 
 $Url = "$BaseUrl/v1/projects/$ProjectId/deployments"
 
