@@ -39,4 +39,4 @@ jobs:
 
       - name: Wait for deployment completed
         shell: pwsh
-        run: .\${{ GITHUB.WORKSPACE }}\.github\workflows\ps\get_deployment_status.ps1 -BaseUrl ${{ env.baseUrl }} -ProjectId ${{ env.projectId }} -DeploymentId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} -ApiKey ${{ env.umbracoCloudApiKey }}
+        run: ${{ GITHUB.WORKSPACE }}/.github/workflows/ps/get_deployment_status.ps1 -BaseUrl ${{ env.baseUrl }} -ProjectId ${{ env.projectId }} -DeploymentId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} -ApiKey ${{ env.umbracoCloudApiKey }}
