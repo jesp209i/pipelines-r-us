@@ -20,10 +20,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Create Deployment Meta
+      - name: Create Deployment Meta PWSH
         id: deployment-meta
-        run: $GITHUB_WORKSPACE/.github/workflows/scripts/create_deployment.sh $projectId $umbracoCloudApiKey "Run number ${{github.run_number}}"
-        shell: bash
+        shell: pwsh
+        run: ${{GITHUB.WORKSPACE}}/.github/workflows/ps/create_deployment.ps1 -BaseUrl ${{env.baseUrl}} -ProjectId ${{ env.projectId }} -ApiKey ${{ env.umbracoCloudApiKey }} -CommitMessage "Run number ${{github.run_number}}"
+
+      #- name: Create Deployment Meta
+      #  id: deployment-meta-sh
+      #  run: $GITHUB_WORKSPACE/.github/workflows/scripts/create_deployment.sh $projectId $umbracoCloudApiKey "Run number ${{github.run_number}}"
+      #  shell: bash
 
       - name: Zip Source Code
         run: zip -r sources.zip . -x ".git/*" ".github/*" "src/UmbracoProject/bin/*" "src/UmbracoProject/obj/*" "node_modules/*"
