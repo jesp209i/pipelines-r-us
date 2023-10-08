@@ -28,7 +28,7 @@ function Create-Deployment {
 
         Write-Output "DEPLOYMENT_ID=$($DeploymentId)" >> $GITHUB_OUTPUT
 
-        Write-Host "Deployment Created Successfully => $(DeploymentId)"
+        Write-Host "Deployment Created Successfully => $($DeploymentId)"
         return
     }
 
