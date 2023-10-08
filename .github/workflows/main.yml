@@ -36,7 +36,7 @@ jobs:
 
       - name: Post Zipped Artifact PWSH
         shell: pwsh
-        run: $GITHUB_WORKSPACE/.github/workflows/ps/upload_package.ps1 -BaseUrl ${{env.baseUrl}} -ProjectId ${{ env.projectId }} -DeploymentId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} -ApiKey ${{ env.umbracoCloudApiKey }} -FilePath ${{ GITHUB.WORKSPACE }}/sources.zip
+        run: ${{GITHUB.WORKSPACE}}/.github/workflows/ps/upload_package.ps1 -BaseUrl ${{env.baseUrl}} -ProjectId ${{ env.projectId }} -DeploymentId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} -ApiKey ${{ env.umbracoCloudApiKey }} -FilePath ${{ GITHUB.WORKSPACE }}/sources.zip
 
       #- name: Post Zipped Artifact
       #  run: $GITHUB_WORKSPACE/.github/workflows/scripts/upload_package.sh $projectId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $umbracoCloudApiKey $GITHUB_WORKSPACE/sources.zip
