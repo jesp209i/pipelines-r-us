@@ -14,7 +14,7 @@ $Body = @{
     'deploymentState' = 'Queued'
 } | ConvertTo-Json
 
-$Url = "$BaseUrl/v1/projects/$ProjectId/deployments"
+$Url = "$BaseUrl/v1/projects/$ProjectId/deployments/$DeploymentId"
 
 function Start-Deployment {
     Write-Host "Requesting start Deployment at $Url"
