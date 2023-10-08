@@ -38,10 +38,13 @@ jobs:
         run: $GITHUB_WORKSPACE/.github/workflows/scripts/upload_package.sh $projectId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $umbracoCloudApiKey $GITHUB_WORKSPACE/sources.zip
         shell: bash
 
-      - name: Request Start Deployment
-        run: $GITHUB_WORKSPACE/.github/workflows/scripts/start_deployment.sh $projectId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $umbracoCloudApiKey
-        shell: bash
+      - name: Request Start Deployment PWSH
+        shell: pwsh
+        run: ${{ GITHUB.WORKSPACE }}/.github/workflows/ps/start_deployment.ps1 -BaseUrl ${{env.baseUrl}} -ProjectId ${{ env.projectId }} -DeploymentId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} -ApiKey ${{ env.umbracoCloudApiKey }}
+     # - name: Request Start Deployment
+     #  run: $GITHUB_WORKSPACE/.github/workflows/scripts/start_deployment.sh $projectId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $umbracoCloudApiKey
+     #   shell: bash
 
-      - name: Wait for deployment completed
+      - name: Wait for deployment completed PWSH
         shell: pwsh
         run: ${{ GITHUB.WORKSPACE }}/.github/workflows/ps/get_deployment_status.ps1 -BaseUrl ${{ env.baseUrl }} -ProjectId ${{ env.projectId }} -DeploymentId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} -ApiKey ${{ env.umbracoCloudApiKey }}
