@@ -1,0 +1,8 @@
+.git/*
+.github/*
+src/MyAwesomeProject.Code/bin/*
+src/MyAwesomeProject.Code/obj/*
+src/MyAwesomeProject.Web/bin/*
+src/MyAwesomeProject.Web/obj/*
+node_modules*
+zipignore
