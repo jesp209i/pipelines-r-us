@@ -5,6 +5,8 @@ param(
     $ApiKey
 )
 
+# Set a reasonable time for deployment to finish
+# 1200 sec = 20 minutes should be enough, but can be set higher
 $TimeoutSeconds = 1200
 $timer = [Diagnostics.Stopwatch]::StartNew()
 
@@ -29,8 +31,7 @@ function Get-Deployment-Status ([INT]$Run){
     catch 
     {
         Write-Host "---Error---"
-        Write-Host "StatusCode:" $_.Exception.Response.StatusCode.value__ 
-        Write-Host "StatusDescription:" $_.Exception.Response.StatusDescription
+        Write-Host $_
         exit 1
     }
 }
@@ -42,27 +43,38 @@ while ($timer.Elapsed.TotalSeconds -lt $TimeoutSeconds) {
 
     do {
         $DeploymentStatus = Get-Deployment-Status($Run)
+        $Run++
+
+        # Handle timeout
         if ($timer.Elapsed.TotalSeconds -gt $TimeoutSeconds){
             throw "Timeout was reached"
         }
-        Write-Host "=====> Still Deploying - sleeping for 15 seconds"
-        Start-Sleep -Seconds 15
-        $Run++
+        
+        # Dont write if Deployment was finished
+        if ($StatusesBeforeCompleted -contains $DeploymentStatus){
+            Write-Host "=====> Still Deploying - sleeping for 15 seconds"
+            Start-Sleep -Seconds 15
+        }
+
     } while (
         $StatusesBeforeCompleted -contains $DeploymentStatus
     )
 
     $timer.Stop()
 
+    # Successfully deployed to cloud
     if ($DeploymentStatus -eq 'Completed'){
         Write-Host "Deployment completed successfully"
         exit 0
     }
+
+    # Deployment has failed
     if ($DeploymentStatus -eq 'Failed'){
         Write-Host "Deployment Failed"
         exit 1 
     }
 
+    # Unexpected deployment status - considered a fail
     Write-Host "Unexpected status: $DeploymentStatus"
     exit 1
 }

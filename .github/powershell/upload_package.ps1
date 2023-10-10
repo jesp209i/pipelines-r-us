@@ -41,8 +41,7 @@ function Upload-Package {
     catch 
     {
         Write-Host "---Error---"
-        Write-Host "StatusCode:" $_.Exception.Response.StatusCode.value__ 
-        Write-Host "StatusDescription:" $_.Exception.Response.StatusDescription
+        Write-Host $_
         exit 1
     }
 }

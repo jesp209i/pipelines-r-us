@@ -27,12 +27,16 @@ function Create-Deployment {
 
             Write-Host $Response.updateMessage
 
+            # write GITHUB environment variable to be used by later steps
             "DEPLOYMENT_ID=$($DeploymentId)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+            # write a AZURE DEVOPS environment variable to be used by later steps
+            # Write-Host "##vso[task.setvariable variable=deploymentId;]$($DeploymentId)"
 
             Write-Host "Deployment Created Successfully => $($DeploymentId)"
             exit 0
         }
-        
+
         Write-Host "---Response Start---"
         Write-Host $Response
         Write-Host "---Response End---"
@@ -41,8 +45,7 @@ function Create-Deployment {
     }
     catch {
         Write-Host "---Error---"
-        Write-Host "StatusCode:" $_.Exception.Response.StatusCode.value__ 
-        Write-Host "StatusDescription:" $_.Exception.Response.StatusDescription
+        Write-Host $_
         exit 1
     }
 }
