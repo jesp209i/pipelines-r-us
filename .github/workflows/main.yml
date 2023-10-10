@@ -39,16 +39,16 @@ jobs:
         shell: bash
 
       # Upload your zipped artifact
-      #- name: Post Zipped Artifact
-      #  shell: pwsh
-      #  run: ${{GITHUB.WORKSPACE}}/.github/powershell/upload_package.ps1 -BaseUrl ${{env.baseUrl}} -ProjectId ${{ env.projectId }} -DeploymentId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} -ApiKey ${{ env.umbracoCloudApiKey }} -FilePath ${{ GITHUB.WORKSPACE }}/sources.zip
+      - name: Post Zipped Artifact
+        shell: pwsh
+        run: ${{GITHUB.WORKSPACE}}/.github/powershell/upload_package.ps1 -BaseUrl ${{env.baseUrl}} -ProjectId ${{ env.projectId }} -DeploymentId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} -ApiKey ${{ env.umbracoCloudApiKey }} -FilePath ${{ GITHUB.WORKSPACE }}/sources.zip
 
       # Actually request to start the deployment process in cloud
-      #- name: Request Start Deployment
-      #  shell: pwsh
-      #  run: ${{ GITHUB.WORKSPACE }}/.github/powershell/start_deployment.ps1 -BaseUrl ${{env.baseUrl}} -ProjectId ${{ env.projectId }} -DeploymentId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} -ApiKey ${{ env.umbracoCloudApiKey }}
+      - name: Request Start Deployment
+        shell: pwsh
+        run: ${{ GITHUB.WORKSPACE }}/.github/powershell/start_deployment.ps1 -BaseUrl ${{env.baseUrl}} -ProjectId ${{ env.projectId }} -DeploymentId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} -ApiKey ${{ env.umbracoCloudApiKey }}
 
       # Poll until deployment finishes 
-      #- name: Wait for deployment completed PWSH
-      #  shell: pwsh
-      #  run: ${{ GITHUB.WORKSPACE }}/.github/powershell/get_deployment_status.ps1 -BaseUrl ${{ env.baseUrl }} -ProjectId ${{ env.projectId }} -DeploymentId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} -ApiKey ${{ env.umbracoCloudApiKey }}
+      - name: Wait for deployment completed PWSH
+        shell: pwsh
+        run: ${{ GITHUB.WORKSPACE }}/.github/powershell/get_deployment_status.ps1 -BaseUrl ${{ env.baseUrl }} -ProjectId ${{ env.projectId }} -DeploymentId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} -ApiKey ${{ env.umbracoCloudApiKey }}

@@ -19,24 +19,25 @@ $Url = "$BaseUrl/v1/projects/$ProjectId/deployments"
 function Create-Deployment {
     Write-Host "Posting to $Url with commit message: $CommitMessage"
     try {
-    $Response = Invoke-RestMethod -URI $Url -Headers $Headers -Method POST -Body $Body
-    $Status = $Response.deploymentState
-    $DeploymentId = $Response.deploymentId
+        $Response = Invoke-RestMethod -URI $Url -Headers $Headers -Method POST -Body $Body
+        $Status = $Response.deploymentState
+        $DeploymentId = $Response.deploymentId
 
-    if ($Status -eq "Created") {
+        if ($Status -eq "Created") {
 
-        Write-Host $Response.updateMessage
+            Write-Host $Response.updateMessage
 
-        "DEPLOYMENT_ID=$($DeploymentId)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+            "DEPLOYMENT_ID=$($DeploymentId)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
 
-        Write-Host "Deployment Created Successfully => $($DeploymentId)"
+            Write-Host "Deployment Created Successfully => $($DeploymentId)"
+            exit 0
+        }
+        
+        Write-Host "---Response Start---"
+        Write-Host $Response
+        Write-Host "---Response End---"
+        Write-Host "Unexpected response - see above"
         exit 1
-    }
-    Write-Host "---Response Start---"
-    Write-Host $Response
-    Write-Host "---Response End---"
-    exit 1
-    
     }
     catch {
         Write-Host "---Error---"
