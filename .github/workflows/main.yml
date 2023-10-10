@@ -4,12 +4,11 @@ on:
   push:
     branches:
      - main
-     - using_project-id
-     - powershell
+     - powershell # current branch
 
 env:
-  projectId: ${{ vars.PROJECT_ID }}
-  umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
+  projectId: ${{ vars.PROJECT_ID }} # Set as variable
+  umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }} # set as secret
   baseUrl : https://api.cloud.umbraco.com
 
 jobs:
@@ -20,35 +19,36 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Create Deployment Meta PWSH
+      # Request to prepare a deployment
+      # - sets the commit message to be used in cloud 
+      # - supplies you with a deploymentId to be used in the rest of the process
+      - name: Create Deployment Meta
         id: deployment-meta
         shell: pwsh
-        run: ${{GITHUB.WORKSPACE}}/.github/workflows/ps/create_deployment.ps1 -BaseUrl ${{env.baseUrl}} -ProjectId ${{ env.projectId }} -ApiKey ${{ env.umbracoCloudApiKey }} -CommitMessage "Run number ${{github.run_number}}"
+        run: ${{GITHUB.WORKSPACE}}/.github/powershell/create_deployment.ps1 -BaseUrl ${{env.baseUrl}} -ProjectId ${{ env.projectId }} -ApiKey ${{ env.umbracoCloudApiKey }} -CommitMessage "Run number ${{github.run_number}}"
 
-      #- name: Create Deployment Meta
-      #  id: deployment-meta-sh
-      #  run: $GITHUB_WORKSPACE/.github/workflows/scripts/create_deployment.sh $projectId $umbracoCloudApiKey "Run number ${{github.run_number}}"
-      #  shell: bash
-
-      - name: Zip Source Code
-        run: zip -r sources.zip . -x ".git/*" ".github/*" "src/UmbracoProject/bin/*" "src/UmbracoProject/obj/*" "node_modules/*"
+      # switch the gitignore files so cloud does not ignore my build frontend assets
+      # this is in order to bundle the the cloud.gitignore correctly
+      - name: Prepare Cloud Git Ignore
+        run: cp cloud.gitignore .gitignore
         shell: bash
 
-      - name: Post Zipped Artifact PWSH
+      # zip everything, but what is defined in the '.zipignore'
+      - name: Zip Source Code
+        run: zip -r sources.zip . -x@.zipignore
+        shell: bash
+
+      # Upload your zipped artifact
+      - name: Post Zipped Artifact
         shell: pwsh
-        run: ${{GITHUB.WORKSPACE}}/.github/workflows/ps/upload_package.ps1 -BaseUrl ${{env.baseUrl}} -ProjectId ${{ env.projectId }} -DeploymentId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} -ApiKey ${{ env.umbracoCloudApiKey }} -FilePath ${{ GITHUB.WORKSPACE }}/sources.zip
+        run: ${{GITHUB.WORKSPACE}}/.github/powershell/upload_package.ps1 -BaseUrl ${{env.baseUrl}} -ProjectId ${{ env.projectId }} -DeploymentId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} -ApiKey ${{ env.umbracoCloudApiKey }} -FilePath ${{ GITHUB.WORKSPACE }}/sources.zip
 
-      #- name: Post Zipped Artifact
-      #  run: $GITHUB_WORKSPACE/.github/workflows/scripts/upload_package.sh $projectId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $umbracoCloudApiKey $GITHUB_WORKSPACE/sources.zip
-      #  shell: bash
-
-      - name: Request Start Deployment PWSH
+      # Actually request to start the deployment process in cloud
+      - name: Request Start Deployment
         shell: pwsh
-        run: ${{ GITHUB.WORKSPACE }}/.github/workflows/ps/start_deployment.ps1 -BaseUrl ${{env.baseUrl}} -ProjectId ${{ env.projectId }} -DeploymentId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} -ApiKey ${{ env.umbracoCloudApiKey }}
-     # - name: Request Start Deployment
-     #  run: $GITHUB_WORKSPACE/.github/workflows/scripts/start_deployment.sh $projectId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $umbracoCloudApiKey
-     #   shell: bash
+        run: ${{ GITHUB.WORKSPACE }}/.github/powershell/start_deployment.ps1 -BaseUrl ${{env.baseUrl}} -ProjectId ${{ env.projectId }} -DeploymentId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} -ApiKey ${{ env.umbracoCloudApiKey }}
 
+      # Poll until deployment finishes 
       - name: Wait for deployment completed PWSH
         shell: pwsh
-        run: ${{ GITHUB.WORKSPACE }}/.github/workflows/ps/get_deployment_status.ps1 -BaseUrl ${{ env.baseUrl }} -ProjectId ${{ env.projectId }} -DeploymentId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} -ApiKey ${{ env.umbracoCloudApiKey }}
+        run: ${{ GITHUB.WORKSPACE }}/.github/powershell/get_deployment_status.ps1 -BaseUrl ${{ env.baseUrl }} -ProjectId ${{ env.projectId }} -DeploymentId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} -ApiKey ${{ env.umbracoCloudApiKey }}
