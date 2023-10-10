@@ -30,7 +30,7 @@ function Create-Deployment {
         "DEPLOYMENT_ID=$($DeploymentId)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
 
         Write-Host "Deployment Created Successfully => $($DeploymentId)"
-        exit 0
+        exit 1
     }
     Write-Host "---Response Start---"
     Write-Host $Response
