@@ -18,6 +18,7 @@ $Url = "$BaseUrl/v1/projects/$ProjectId/deployments"
 
 function Create-Deployment {
     Write-Host "Posting to $Url with commit message: $CommitMessage"
+    try {
     $Response = Invoke-RestMethod -URI $Url -Headers $Headers -Method POST -Body $Body
     $Status = $Response.deploymentState
     $DeploymentId = $Response.deploymentId
@@ -29,10 +30,20 @@ function Create-Deployment {
         "DEPLOYMENT_ID=$($DeploymentId)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
 
         Write-Host "Deployment Created Successfully => $($DeploymentId)"
-        return
+        exit 0
     }
-
-    throw "Unexpected Response from Api"
+    Write-Host "---Response Start---"
+    Write-Host $Response
+    Write-Host "---Response End---"
+    exit 1
+    
+    }
+    catch {
+        Write-Host "---Error---"
+        Write-Host "StatusCode:" $_.Exception.Response.StatusCode.value__ 
+        Write-Host "StatusDescription:" $_.Exception.Response.StatusDescription
+        exit 1
+    }
 }
 
 Create-Deployment
