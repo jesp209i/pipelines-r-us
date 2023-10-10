@@ -7,48 +7,71 @@ param(
     $DownloadFolder
 )
 
+
 $DeploymentUrl = "$BaseUrl/v1/projects/$ProjectId/deployments"
 
-# Get latest deployment id
-function get_latest_deployment_id {
-  deployments_url="https://api.cloud.umbraco.com/v1/projects/$projectId/deployments?skip=0&take=1"
-  response=$(curl --insecure -s -X GET $deployments_url \
-    -H "Umbraco-Cloud-Api-Key: $apiKey" \
-    -H "Content-Type: application/json")
-  echo "$response"
-  latestDeploymentId=$(echo $response | jq -r '.deployments[0].deploymentId')
+$Headers = @{
+  'Umbraco-Cloud-Api-Key' = $ApiKey
+  'Content-Type' = 'application/json'
 }
+
+# Get latest deployment id
+function Get-Latest-DeploymentId {
+  $LatestDeploymentUrl = "$($DeploymentUrl)?skip=0&take=1"
+    $Response = Invoke-WebRequest -URI $LatestDeploymentUrl -Headers $Headers 
+    if ($Response.StatusCode -eq 200) {
+        # Only fetching the latest one, but endpoint returns a list
+        $JsonResponse = ConvertFrom-Json $([String]::new($response.Content))
+
+        return $JsonResponse.deployments[0].deploymentId
+        #return '229dc5c0-0a97-44d8-88e3-f90cc79fb4c8'
+    }
+
+    throw "Unexpected Response from Api"
+}
+
 
 # Get diff - stores file as git-patch.diff
-function get_changes {
-  mkdir -p $downloadFolder # ensure folder exists
-  change_url="https://api.cloud.umbraco.com/v1/projects/$projectId/deployments/$latestDeploymentId/diff"
-  responseCode=$(curl --insecure -s -w "%{http_code}" -L -o "$downloadFolder/git-patch.diff" -X GET $change_url \
-    -H "Umbraco-Cloud-Api-Key: $apiKey" \
-    -H "Content-Type: application/json")
-  echo "Response code: $responseCode"
+function Get-Changes ($DeploymentId) {
+  if (!(Test-Path $DownloadFolder -PathType Container)) { # ensure folder exists
+      New-Item -ItemType Directory -Force -Path $DownloadFolder
+  }
+  
+  $ChangeUrl="$($DeploymentUrl)/$($DeploymentId)/diff"
+  Write-Host $ChangeUrl
+  
+  $Response = Invoke-WebRequest -URI $ChangeUrl -Headers $Headers
+  $StatusCode = $Response.StatusCode
+  Write-Host $StatusCode
+  # Extract the responsebody into a file
+  $Response | Select-Object -ExpandProperty Content | Out-File "$DownloadFolder/git-patch.diff"
+  
+  return $StatusCode
 }
 
-get_latest_deployment_id
+$LatestDeploymentId = Get-Latest-DeploymentId
 
-# deployment id found
-if [ -z "$latestDeploymentId" ]; then
-  echo "Deployment id not found."
-  exit 1
-fi
+try {
 
-get_changes
+  $DiffStatusCode = Get-Changes($LatestDeploymentId)
+  Write-Host "diffstatus is $DiffStatusCode"
+  if ($DiffStatusCode -eq '204'){
+    Write-Host "No Changes"
+    ## TODO write to github that no changes is registered
+    #"REMOTE_CHANGES=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+    return
+  }
 
-if [[ 10#$responseCode -eq 204 ]]; then # Http 204 No Content means that there are no changes
-  echo "No changes"
-  rm -fr $downloadFolder/git-patch.diff
-  echo "##vso[task.setvariable variable=remoteChanges;isOutput=true]no"
-elif [[ 10#$responseCode -eq 200 ]]; then # Http 200 downloads the file and set a few variables for pipeline
-  echo "Changes - check file - $downloadFolder/git-patch.diff"
-  echo "##vso[task.setvariable variable=remoteChanges;isOutput=true]yes"
-  echo "##vso[task.setvariable variable=lastestDeploymentId;isOutput=true]$latestDeploymentId"
-  echo "##vso[task.setvariable variable=remoteChangeFile;isOutput=true]git-patch.diff"
-else
-  echo "Unexpected status: $responseCode"
-  exit 1
-fi
+  if ($DiffStatusCode -eq '200'){
+    Write-Host "Changes registered - check file: $DownloadFolder/git-patch.diff"
+    ## TODO write to github that changes are registered
+    #"REMOTE_CHANGES=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+    #"latestDeploymentId=$LatestDeploymentId" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+    #"REMOTE_CHANGE_FILE=git-patch.diff" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+    return
+  }
+}
+catch {
+  $StatusCode = $_.Exception.Response.StatusCode.value__
+  throw "Unexpected Statuscode $StatusCode"
+}

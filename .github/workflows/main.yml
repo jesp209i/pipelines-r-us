@@ -13,6 +13,75 @@ env:
   baseUrl : https://api.cloud.umbraco.com
 
 jobs:
+## Translating AZ Devops preflight to github actions
+#  preflight:
+#    name: Preflight checks
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+
+#      - name: Get Remote Changes PWSH
+#        id: remoteCheck
+#        shell: pwsh
+#        run: ${{GITHUB.WORKSPACE}}/.github/workflows/ps/get_changes_since_last_deployment.ps1 -BaseUrl ${{env.baseUrl}} -ProjectId ${{ env.projectId }} -ApiKey ${{ env.umbracoCloudApiKey }} -DownloadFolder ${{GITHUB.WORKSPACE}}/diff"
+
+#      - name: Apply Changes
+#        id: bubber
+#        needs: remoteCheck
+#        if: ${{ steps.remoteCheck.outputs.REMOTE_CHANGES == true }}
+#        shell: bash
+#        run: 
+        
+
+
+  ## From Azure Devops
+  #     - job: CheckRemoteChanges
+  #       displayName: Check for remote changes since last deployment
+  #       steps:
+  #         - task: ShellScript@2
+  #           displayName: Get remote changes if any
+  #           name: get_remote_changes
+  #           inputs:
+  #             scriptPath: devops/get_changes_since_last_deployment.sh
+  #             args: '$(project-id) $(umbraco-cloud-api-key) $(Pipeline.Workspace)/git-patch'
+  #         - publish: $(Pipeline.Workspace)/git-patch
+  #           displayName: Publish git-patch diff file
+  #           condition: and(succeeded(), eq(variables['get_remote_changes.remoteChanges'], 'yes'))
+  #           artifact: PatchFile
+
+  #     - job: ApplyChanges
+  #       displayName: Apply remote change
+  #       dependsOn: CheckRemoteChanges
+  #       condition: eq(dependencies.CheckRemoteChanges.outputs['get_remote_changes.remoteChanges'], 'yes')
+  #       variables:
+  #         gitPatchFile: $[ dependencies.CheckRemoteChanges.outputs['get_remote_changes.remoteChangeFile'] ]
+  #       steps:
+  #         - download: current
+  #           displayName: Get patch file to apply
+  #           artifact: PatchFile
+  #         - bash: |
+  #             git config user.name "Build pipeline"
+  #             git config user.email email@email.com
+  #             git switch -c auto/merge_remote_changes_for_$(Build.BuildNumber)
+  #             git apply -v $(Pipeline.Workspace)/PatchFile/$(gitPatchFile)
+  #             git commit -m "Auto updated changes from remote for build $(Build.BuildNumber)" .
+  #             git remote add tmp-pusher https://company-repository-name@dev.azure.com/company-repository-name/azuredevops-project-name/_git/azuredevops-project-name
+  #             git push --set-upstream tmp-pusher auto/merge_remote_changes_for_$(Build.BuildNumber)
+  #           displayName: Applying git patch to new branch
+  #     - job: ManualApproval
+  #       displayName: Possible Manual Approval gate
+  #       dependsOn: [CheckRemoteChanges,ApplyChanges]
+  #       condition: and(succeeded(), eq(dependencies.CheckRemoteChanges.outputs['get_remote_changes.remoteChanges'], 'yes'))
+  #       pool: server
+  #       steps:
+  #         - task: ManualValidation@0
+  #           displayName: Merge remote changes manually
+  #           timeoutInMinutes: 30
+  #           inputs:
+  #             notifyUsers: |
+  #               username
+  #             instructions: 'Please merge auto/merge_remote_changes_for_$(Build.BuildNumber) and restart build. If this was already done, please just let this step continue.'
+  #             onTimeout: 'reject'
 
   publish:
     name: Zip and Publish to Cloud
