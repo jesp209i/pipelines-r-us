@@ -15,7 +15,7 @@ $Headers = @{
 $Url = "$BaseUrl/v1/projects/$ProjectId/deployments/$DeploymentId"
 
 function Get-Deployment-Status ([INT]$Run){
-    Write-Host "Run $Run"
+    Write-Host "=====> Requesting Status - Run number $Run"
     $Response = Invoke-WebRequest -URI $Url -Headers $Headers 
     if ($Response.StatusCode -eq 200) {
 
@@ -38,7 +38,7 @@ while ($timer.Elapsed.TotalSeconds -lt $TimeoutSeconds) {
         if ($timer.Elapsed.TotalSeconds -gt $TimeoutSeconds){
             throw "Timeout was reached"
         }
-        Write-Host "Deployment was not ready - sleeping for 15 seconds"
+        Write-Host "=====> Still Deploying - sleeping for 15 seconds"
         Start-Sleep -Seconds 15
         $Run++
         $DeploymentStatus = Get-Deployment-Status($Run)
