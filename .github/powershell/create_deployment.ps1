@@ -2,7 +2,8 @@ param(
     $BaseUrl,
     $ProjectId,
     $ApiKey,
-    $CommitMessage
+    $CommitMessage,
+    $PipelineVendor
 )
 
 $Headers = @{
@@ -27,11 +28,19 @@ function Create-Deployment {
 
             Write-Host $Response.updateMessage
 
-            # write GITHUB environment variable to be used by later steps
-            "DEPLOYMENT_ID=$($DeploymentId)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-
-            # write a AZURE DEVOPS environment variable to be used by later steps
-            # Write-Host "##vso[task.setvariable variable=deploymentId;]$($DeploymentId)"
+            switch ($PipelineVendor) {
+                "GITHUB" {
+                    "DEPLOYMENT_ID=$($DeploymentId)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+                  }
+                  "AZUREDEVOPS" {
+                    Write-Host "##vso[task.setvariable variable=deploymentId;]$($DeploymentId)"
+                  }
+                Default {
+                    Write-Host "Please use one of the supported Pipeline Vendors or enhance script to fit your needs"
+                    Write-Host "Currently supported are: GITHUB and AZUREDEVOPS"
+                    Exit 1
+                }
+            }
 
             Write-Host "Deployment Created Successfully => $($DeploymentId)"
             exit 0
