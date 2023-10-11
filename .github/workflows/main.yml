@@ -25,7 +25,7 @@ jobs:
       - name: Create Deployment Meta
         id: deployment-meta
         shell: pwsh
-        run: ${{GITHUB.WORKSPACE}}/.github/powershell/create_deployment.ps1 -BaseUrl ${{env.baseUrl}} -ProjectId ${{ env.projectId }} -ApiKey ${{ env.umbracoCloudApiKey }} -CommitMessage "Run number ${{github.run_number}}" -PipelineVendor GITHUB
+        run: ${{GITHUB.WORKSPACE}}/powershell/New-Deployment.ps1 -baseUrl ${{env.baseUrl}} -projectId ${{ env.projectId }} -apiKey ${{ env.umbracoCloudApiKey }} -commitMessage "Run number ${{github.run_number}}" -pipelineVendor GITHUB
 
       # switch the gitignore files so cloud does not ignore my build frontend assets
       # this is in order to bundle the the cloud.gitignore correctly
@@ -41,14 +41,14 @@ jobs:
       # Upload your zipped artifact
       - name: Post Zipped Artifact
         shell: pwsh
-        run: ${{GITHUB.WORKSPACE}}/.github/powershell/upload_package.ps1 -BaseUrl ${{env.baseUrl}} -ProjectId ${{ env.projectId }} -DeploymentId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} -ApiKey ${{ env.umbracoCloudApiKey }} -FilePath ${{ GITHUB.WORKSPACE }}/sources.zip
+        run: ${{GITHUB.WORKSPACE}}/powershell/Add-Deployment-Package.ps1 -baseUrl ${{env.baseUrl}} -projectId ${{ env.projectId }} -deploymentId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} -apiKey ${{ env.umbracoCloudApiKey }} -filePath ${{ GITHUB.WORKSPACE }}/sources.zip
 
       # Actually request to start the deployment process in cloud
       - name: Request Start Deployment
         shell: pwsh
-        run: ${{ GITHUB.WORKSPACE }}/.github/powershell/start_deployment.ps1 -BaseUrl ${{env.baseUrl}} -ProjectId ${{ env.projectId }} -DeploymentId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} -ApiKey ${{ env.umbracoCloudApiKey }}
+        run: ${{ GITHUB.WORKSPACE }}/powershell/Start-Deployment.ps1 -baseUrl ${{env.baseUrl}} -projectId ${{ env.projectId }} -deploymentId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} -apiKey ${{ env.umbracoCloudApiKey }}
 
       # Poll until deployment finishes 
       - name: Wait for deployment completed PWSH
         shell: pwsh
-        run: ${{ GITHUB.WORKSPACE }}/.github/powershell/get_deployment_status.ps1 -BaseUrl ${{ env.baseUrl }} -ProjectId ${{ env.projectId }} -DeploymentId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} -ApiKey ${{ env.umbracoCloudApiKey }}
+        run: ${{ GITHUB.WORKSPACE }}/powershell/Get-Deployment-Status.ps1 -baseUrl ${{ env.baseUrl }} -projectId ${{ env.projectId }} -deploymentId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} -apiKey ${{ env.umbracoCloudApiKey }}
