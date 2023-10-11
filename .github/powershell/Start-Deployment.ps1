@@ -1,28 +1,30 @@
-param(
-    $BaseUrl,
-    $ProjectId,
-    $DeploymentId,
-    $ApiKey
-)
-
-$Headers = @{
-    'Umbraco-Cloud-Api-Key' = $ApiKey
-    'Content-Type' = 'application/json'
-}
-
-$Body = @{
-    'deploymentState' = 'Queued'
-} | ConvertTo-Json
-
-$Url = "$BaseUrl/v1/projects/$ProjectId/deployments/$DeploymentId"
-
 function Start-Deployment {
-    try {
-        Write-Host "Requesting start Deployment at $Url"
-        $Response = Invoke-RestMethod -URI $Url -Headers $Headers -Method PATCH -Body $Body
-        $Status = $Response.deploymentState
+    [CmdletBinding()]
+    param(
+        $baseUrl,
+        $projectId,
+        $deploymentId,
+        $apiKey
+    )
 
-        if ($Status -eq "Queued") {
+    $headers = @{
+        'Umbraco-Cloud-Api-Key' = $apiKey
+        'Content-Type' = 'application/json'
+    }
+
+    $body = @{
+        'deploymentState' = 'Queued'
+    } | ConvertTo-Json
+
+    $url = "$baseUrl/v1/projects/$projectId/deployments/$deploymentId"
+
+
+    try {
+        Write-Host "Requesting start Deployment at $url"
+        $response = Invoke-RestMethod -URI $url -Headers $headers -Method PATCH -Body $body
+        $status = $response.deploymentState
+
+        if ($status -eq "Queued") {
             Write-Host $Response.updateMessage
             exit 0
         }
@@ -39,5 +41,3 @@ function Start-Deployment {
         exit 1
     }
 }
-
-Start-Deployment

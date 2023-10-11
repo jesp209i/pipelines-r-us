@@ -1,41 +1,43 @@
-#Set Variables
-param(
-    $BaseUrl,
-    $ProjectId,
-    $DeploymentId,
-    $ApiKey,
-    $FilePath
-)
-$Url = "$BaseUrl/v1/projects/$ProjectId/deployments/$DeploymentId/package"
+function Add-Deployment-Package {
+    [CmdletBinding()]
+    param(
+        [string] $baseUrl,
+        [string] $projectId,
+        [string] $apiKey,
+        [string] $deploymentId,
+        [string] $filePath
+    )
 
-$FieldName = 'file'
-$ContentType = 'application/zip'
-$UmbracoHeader = @{ 'Umbraco-Cloud-Api-Key' = $ApiKey }
+    $url = "$baseUrl/v1/projects/$projectId/deployments/$deploymentId/package"
 
-function Upload-Package {
-    $FileStream = [System.IO.FileStream]::new($FilePath, [System.IO.FileMode]::Open)
-    $FileHeader = [System.Net.Http.Headers.ContentDispositionHeaderValue]::new('form-data')
-    $FileHeader.Name = $FieldName
-    $FileHeader.FileName = Split-Path -leaf $FilePath
-    $FileContent = [System.Net.Http.StreamContent]::new($FileStream)
-    $FileContent.Headers.ContentDisposition = $FileHeader
-    $FileContent.Headers.ContentType = [System.Net.Http.Headers.MediaTypeHeaderValue]::Parse($ContentType)
+    $fieldName = 'file'
+    $contentType = 'application/zip'
+    $umbracoHeader = @{ 'Umbraco-Cloud-Api-Key' = $ApiKey }
 
-    $MultipartContent = [System.Net.Http.MultipartFormDataContent]::new()
-    $MultipartContent.Add($FileContent)
+
+    $fileStream = [System.IO.FileStream]::new($filePath, [System.IO.FileMode]::Open)
+    $fileHeader = [System.Net.Http.Headers.ContentDispositionHeaderValue]::new('form-data')
+    $fileHeader.Name = $fieldName
+    $fileHeader.FileName = Split-Path -leaf $filePath
+    $fileContent = [System.Net.Http.StreamContent]::new($fileStream)
+    $fileContent.Headers.ContentDisposition = $fileHeader
+    $fileContent.Headers.ContentType = [System.Net.Http.Headers.MediaTypeHeaderValue]::Parse($contentType)
+
+    $multipartContent = [System.Net.Http.MultipartFormDataContent]::new()
+    $multipartContent.Add($fileContent)
 
     try {
-        $Response = Invoke-WebRequest -Body $MultipartContent -Headers $UmbracoHeader  -Method 'POST' -Uri $Url
-        if ($Response.StatusCode -ne 202)
+        $response = Invoke-WebRequest -Body $multipartContent -Headers $umbracoHeader  -Method 'POST' -Uri $url
+        if ($response.StatusCode -ne 202)
         {
             Write-Host "---Response Start---"
-            Write-Host $Response
+            Write-Host $response
             Write-Host "---Response End---"
             Write-Host "Unexpected response - see above"
             exit 1
         }
 
-        Write-Host $Response.Content | ConvertTo-Json
+        Write-Host $response.Content | ConvertTo-Json
         exit 0
     }
     catch 
@@ -45,5 +47,3 @@ function Upload-Package {
         exit 1
     }
 }
-
-Upload-Package
