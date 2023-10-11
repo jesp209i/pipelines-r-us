@@ -1,15 +1,15 @@
 function New-Deployment {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [string] $baseUrl,
-        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [string] $projectId,
-        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [string] $apiKey,
-        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [string] $commitMessage,
-        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [string] $pipelineVendor
     )
 
