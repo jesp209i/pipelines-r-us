@@ -3,6 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+## This is the cloudgitignore
+
 # Terraform files
 .terraform
 */.terraform
@@ -418,3 +420,4 @@ healthchecksdb
 # Ignore js build assets
 **/wwwroot/app/
 download/git-changes.patch
+
