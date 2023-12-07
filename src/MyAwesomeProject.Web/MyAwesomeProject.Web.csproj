@@ -14,6 +14,7 @@
     <PackageReference Include="Umbraco.Deploy.Contrib" Version="11.0.1" />
     <PackageReference Include="Umbraco.Deploy.Forms" Version="11.1.7" />
     <PackageReference Include="Umbraco.Forms" Version="11.2.1" />
+    <PackageReference Include="Umbraco.Cloud.Shared.Kernel" Version="0.1.4" />
   </ItemGroup>
 
   <ItemGroup>
