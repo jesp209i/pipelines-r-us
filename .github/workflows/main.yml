@@ -6,6 +6,7 @@ on:
      - main
      - using_project-id
      - powershell
+     - pwsh-get-changes
 
 env:
   projectId: ${{ vars.PROJECT_ID }}
