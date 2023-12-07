@@ -9,6 +9,8 @@
 
   <ItemGroup>
 
+    <PackageReference Include="Umbraco.Cloud.Shared.Kernel" Version="0.1.4" />
+
     <PackageReference Include="Umbraco.Cms" Version="11.5.0" />
 
   </ItemGroup>
