@@ -11,29 +11,42 @@ on:
 env:
   projectId: ${{ vars.PROJECT_ID }}
   umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
-  baseUrl : https://api.cloud.umbraco.com
 
 jobs:
 ## Translating AZ Devops preflight to github actions
-#  preflight:
-#    name: Preflight checks
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
+  preflight:
+    name: Preflight checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
 
-#      - name: Get Remote Changes PWSH
-#        id: remoteCheck
-#        shell: pwsh
-#        run: ${{GITHUB.WORKSPACE}}/.github/workflows/ps/get_changes_since_last_deployment.ps1 -BaseUrl ${{env.baseUrl}} -ProjectId ${{ env.projectId }} -ApiKey ${{ env.umbracoCloudApiKey }} -DownloadFolder ${{GITHUB.WORKSPACE}}/diff"
+      # Gets the latest CICD Flow deployment if there is any
+      # Will write "latestDeploymentId" to pipeline variables, value can be an uuid or empty string 
+      - name: Get Latest Deployment
+        id: latest-deployment
+        shell: pwsh
+        run: >
+          ${{GITHUB.WORKSPACE}}/.github/powershell/get-latest-deployment.ps1 
+          -ProjectId ${{ env.projectId }} 
+          -ApiKey ${{ env.umbracoCloudApiKey }} 
+          -PipelineVendor GITHUB
+      
+      ## TODO: MISSING LOGIC
+      # If "latestDeploymentId" is '', then skip the ahead to "Prepare Cloud Git Ignore"
 
-#      - name: Apply Changes
-#        id: bubber
-#        needs: remoteCheck
-#        if: ${{ steps.remoteCheck.outputs.REMOTE_CHANGES == true }}
-#        shell: bash
-#        run: 
-        
-
+      # Download git-patch file based on latest deployment
+      # Will write "remoteChanges" to pipeline variables, value can be "yes" or "no"
+      # When "remoteChanges" is yes, there will also be downloaded a patch-file to the path you specified in -DownloadFolder parameter
+      - name: Fetch Changes From Cloud
+        id: latest-changes
+        shell: pwsh
+        run: >
+          ${{GITHUB.WORKSPACE}}/.github/powershell/get-changes-by-id.ps1 
+          -ProjectId ${{ env.projectId }} 
+          -ApiKey ${{ env.umbracoCloudApiKey }} 
+          -DeploymentId ${{ steps.latest-deployment.outputs.latestDeploymentId}}
+          -DownloadFolder ${{GITHUB.WORKSPACE}}/patch
+          -PipelineVendor GITHUB
 
   ## From Azure Devops
   #     - job: CheckRemoteChanges
@@ -90,35 +103,53 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Create Deployment Meta PWSH
-        id: deployment-meta
-        shell: pwsh
-        run: ${{GITHUB.WORKSPACE}}/.github/workflows/ps/create_deployment.ps1 -BaseUrl ${{env.baseUrl}} -ProjectId ${{ env.projectId }} -ApiKey ${{ env.umbracoCloudApiKey }} -CommitMessage "Run number ${{github.run_number}}"
-
-      #- name: Create Deployment Meta
-      #  id: deployment-meta-sh
-      #  run: $GITHUB_WORKSPACE/.github/workflows/scripts/create_deployment.sh $projectId $umbracoCloudApiKey "Run number ${{github.run_number}}"
-      #  shell: bash
-
-      - name: Zip Source Code
-        run: zip -r sources.zip . -x ".git/*" ".github/*" "src/UmbracoProject/bin/*" "src/UmbracoProject/obj/*" "node_modules/*"
+      # switch the gitignore files so cloud does not ignore the build frontend assets
+      - name: Prepare Cloud Git Ignore
+        run: cp cloud.gitignore .gitignore
         shell: bash
 
-      - name: Post Zipped Artifact PWSH
-        shell: pwsh
-        run: ${{GITHUB.WORKSPACE}}/.github/workflows/ps/upload_package.ps1 -BaseUrl ${{env.baseUrl}} -ProjectId ${{ env.projectId }} -DeploymentId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} -ApiKey ${{ env.umbracoCloudApiKey }} -FilePath ${{ GITHUB.WORKSPACE }}/sources.zip
+      # zip everything, except what is defined in the '.zipignore'
+      - name: Zip Source Code
+        run: zip -r sources.zip . -x@cloud.zipignore
+        shell: bash
 
-      #- name: Post Zipped Artifact
-      #  run: $GITHUB_WORKSPACE/.github/workflows/scripts/upload_package.sh $projectId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $umbracoCloudApiKey $GITHUB_WORKSPACE/sources.zip
-      #  shell: bash
-
-      - name: Request Start Deployment PWSH
+      # Request to prepare a deployment
+      # - sets the commit message to be used in cloud 
+      # - supplies you with a deploymentId to be used in the rest of the process
+      - name: Create Deployment Meta
+        id: deployment-meta
         shell: pwsh
-        run: ${{ GITHUB.WORKSPACE }}/.github/workflows/ps/start_deployment.ps1 -BaseUrl ${{env.baseUrl}} -ProjectId ${{ env.projectId }} -DeploymentId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} -ApiKey ${{ env.umbracoCloudApiKey }}
-     # - name: Request Start Deployment
-     #  run: $GITHUB_WORKSPACE/.github/workflows/scripts/start_deployment.sh $projectId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} $umbracoCloudApiKey
-     #   shell: bash
+        run: >
+          ${{GITHUB.WORKSPACE}}/.github/powershell/new-deployment.ps1 
+          -ProjectId ${{ env.projectId }} 
+          -ApiKey ${{ env.umbracoCloudApiKey }} 
+          -CommitMessage "Run number ${{github.run_number}}" 
+          -PipelineVendor GITHUB
 
-      - name: Wait for deployment completed PWSH
+      # Upload your zipped artifact
+      - name: Post Zipped Artifact
         shell: pwsh
-        run: ${{ GITHUB.WORKSPACE }}/.github/workflows/ps/get_deployment_status.ps1 -BaseUrl ${{ env.baseUrl }} -ProjectId ${{ env.projectId }} -DeploymentId ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }} -ApiKey ${{ env.umbracoCloudApiKey }}
+        run: >
+          ${{GITHUB.WORKSPACE}}/.github/powershell/add-deployment-package.ps1 
+          -ProjectId ${{ env.projectId }} 
+          -DeploymentId ${{ steps.deployment-meta.outputs.deploymentId }} 
+          -ApiKey ${{ env.umbracoCloudApiKey }} 
+          -FilePath ${{ GITHUB.WORKSPACE }}/sources.zip
+
+      # Actually request to start the deployment process in cloud
+      - name: Request Start Deployment
+        shell: pwsh
+        run: >
+          ${{GITHUB.WORKSPACE}}/.github/powershell/start-deployment.ps1 
+          -ProjectId ${{ env.projectId }} 
+          -DeploymentId ${{ steps.deployment-meta.outputs.deploymentId }} 
+          -ApiKey ${{ env.umbracoCloudApiKey }}
+
+      # Poll until deployment finishes 
+      - name: Wait for deployment completed 
+        shell: pwsh
+        run: >
+          ${{GITHUB.WORKSPACE}}/.github/powershell/test-deployment-status.ps1 
+          -ProjectId ${{ env.projectId }} 
+          -DeploymentId ${{ steps.deployment-meta.outputs.deploymentId }} 
+          -ApiKey ${{ env.umbracoCloudApiKey }}
