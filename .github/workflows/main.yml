@@ -35,7 +35,6 @@ jobs:
   checkForChanges:
     name: Check if there are changes since latest deployment
     needs: preflight
-    if: ${{ needs.preflight.outputs.latestDeploymentId != '' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -44,6 +43,7 @@ jobs:
       # Will write "remoteChanges" to pipeline variables, value can be "yes" or "no"
       # When "remoteChanges" is yes, there will also be downloaded a patch-file to the path you specified in -DownloadFolder parameter
       - name: Fetch Changes From Cloud
+        if: ${{ needs.preflight.outputs.latestDeploymentId != '' }}
         id: latest-changes
         shell: pwsh
         run: >
