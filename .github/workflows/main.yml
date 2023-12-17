@@ -89,7 +89,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: git-patch
-          path: ${{GITHUB.WORKSPACE}}/patch/git-patch.diff
+          path: ${{GITHUB.WORKSPACE}}/patch
       
       - name: Apply Change
         env:
