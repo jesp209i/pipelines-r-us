@@ -49,6 +49,10 @@ jobs:
           -DownloadFolder ${{GITHUB.WORKSPACE}}/patch
           -PipelineVendor GITHUB
 
+      - name: See diff content
+        shell: pwsh
+        run: get-content ${{GITHUB.WORKSPACE}}/patch/git-patch.diff
+
       - name: fail
         if: ${{ steps.latest-deployment.outputs.latestDeploymentId != '' }}
         run: exit 1
