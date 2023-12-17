@@ -17,8 +17,6 @@ jobs:
   preflight:
     name: Preflight checks
     runs-on: ubuntu-latest
-    outputs: 
-      latestDeployemntId: steps.latest-deployment.outputs.latestDeploymentId
     steps:
       # Gets the latest CICD Flow deployment if there is any
       # Will write "latestDeploymentId" to pipeline variables, value can be an uuid or empty string 
@@ -31,9 +29,11 @@ jobs:
           -ProjectId ${{ env.projectId }} 
           -ApiKey ${{ env.umbracoCloudApiKey }} 
           -PipelineVendor GITHUB
+    outputs: 
+      latestDeployemntId: steps.latest-deployment.outputs.latestDeploymentId
 
   checkForChanges:
-    name: CHeck if there are changes since latest deployment
+    name: Check if there are changes since latest deployment
     needs: preflight
     if: ${{ needs.preflight.outputs.latestDeploymentId != '' }}
     runs-on: ubuntu-latest
@@ -67,8 +67,6 @@ jobs:
           path: ${{GITHUB.WORKSPACE}}/patch/git-patch.diff
           retention-days: 1
 
-      - name: fail
-        run: exit 1;
   ## From Azure Devops
   #     - job: CheckRemoteChanges
   #       displayName: Check for remote changes since last deployment
@@ -121,8 +119,11 @@ jobs:
   publish:
     name: Zip and Publish to Cloud
     runs-on: ubuntu-latest
-    needs: preflight
+    needs: [preflight, checkForChanges]
     steps:
+      - name: fail # fail fast before sending to cloud
+        run: exit 1;
+
       - uses: actions/checkout@v3
 
       # switch the gitignore files so cloud does not ignore the build frontend assets
