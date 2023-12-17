@@ -13,7 +13,6 @@ env:
   umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
 
 jobs:
-## Translating AZ Devops preflight to github actions
   preflight:
     name: Preflight checks
     runs-on: ubuntu-latest
@@ -59,28 +58,43 @@ jobs:
         shell: pwsh
         run: get-content ${{GITHUB.WORKSPACE}}/patch/git-patch.diff
 
-      - name: 'Store diff before applying'
+      - name: Store diff before applying
         if: ${{ steps.latest-changes.outputs.remoteChanges == 'yes' }}
         uses: actions/upload-artifact@v3
         with:
           name: git-patch
           path: ${{GITHUB.WORKSPACE}}/patch/git-patch.diff
           retention-days: 1
+    outputs:
+      remoteChanges: steps.latest-changes.outputs.remoteChanges
+
+  applyRemoteChanges:
+    name: Apply remote changes
+    needs: checkForChanges
+    runs-on: ubuntu-latest
+    steps:
+      - name: hello
+        if: ${{ needs.checkForChanges.outputs.remoteChanges == 'yes' }}
+        uses: actions/checkout@v3
+
+      - name: Get stored diff
+        if: ${{ needs.checkForChanges.outputs.remoteChanges == 'yes' }}
+        uses: actions/download-artifact@v3
+        with:
+          name: git-patch
+          path: ${{GITHUB.WORKSPACE}}/patch/git-patch.diff
+      
+      - name: Apply Change
+        if: ${{ needs.checkForChanges.outputs.remoteChanges == 'yes' }}
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git apply ${{GITHUB.WORKSPACE}}/patch/git-patch.diff
+          git add *
+          git commit -m "Adding changes in pipeline [skip ci]"
+          git push
 
   ## From Azure Devops
-  #     - job: CheckRemoteChanges
-  #       displayName: Check for remote changes since last deployment
-  #       steps:
-  #         - task: ShellScript@2
-  #           displayName: Get remote changes if any
-  #           name: get_remote_changes
-  #           inputs:
-  #             scriptPath: devops/get_changes_since_last_deployment.sh
-  #             args: '$(project-id) $(umbraco-cloud-api-key) $(Pipeline.Workspace)/git-patch'
-  #         - publish: $(Pipeline.Workspace)/git-patch
-  #           displayName: Publish git-patch diff file
-  #           condition: and(succeeded(), eq(variables['get_remote_changes.remoteChanges'], 'yes'))
-  #           artifact: PatchFile
 
   #     - job: ApplyChanges
   #       displayName: Apply remote change
