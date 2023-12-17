@@ -1,0 +1,13 @@
+diff --git a/vite.config.ts b/vite.config.ts
+index 3aa8bac..54e85da 100644
+--- a/vite.config.ts
++++ b/vite.config.ts
+@@ -1,6 +1,6 @@
+ import { defineConfig } from 'vite'
+ import { resolve } from 'path'
+-
++// comment
+ export default defineConfig({
+   build: {
+     outDir: 'src/MyAwesomeProject.Web/wwwroot/app/', // inside the Umbraco project
+
