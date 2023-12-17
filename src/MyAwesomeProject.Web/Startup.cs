@@ -1,9 +1,7 @@
-using Umbraco.Cloud.Shared.Kernel;
 namespace UmbracoProject
 {
     public class Startup
     {
-        GlobalPlan plan = GlobalPlan.CloudStarter;
         private readonly IWebHostEnvironment _env;
         private readonly IConfiguration _config;
 
