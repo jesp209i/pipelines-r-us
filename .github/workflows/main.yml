@@ -29,7 +29,7 @@ jobs:
           -ApiKey ${{ env.umbracoCloudApiKey }} 
           -PipelineVendor GITHUB
     outputs: 
-      latestDeployemntId: steps.latest-deployment.outputs.latestDeploymentId
+      latestDeployemntId: ${{ steps.latest-deployment.outputs.latestDeploymentId }}
 
   checkForChanges:
     name: Check if there are changes since latest deployment
@@ -37,19 +37,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
       # Download git-patch file based on latest deployment
       # Will write "remoteChanges" to pipeline variables, value can be "yes" or "no"
       # When "remoteChanges" is yes, there will also be downloaded a patch-file to the path you specified in -DownloadFolder parameter
       - name: Fetch Changes From Cloud
-        if: ${{ needs.preflight.outputs.latestDeploymentId != '' }}
+        env:
+          latestDeploymentId: ${{ needs.preflight.outputs.latestDeployemntId }}
+        if: ${{ env.latestDeploymentId != '' }}
         id: latest-changes
         shell: pwsh
         run: >
           ${{GITHUB.WORKSPACE}}/.github/powershell/get-changes-by-id.ps1 
           -ProjectId ${{ env.projectId }} 
           -ApiKey ${{ env.umbracoCloudApiKey }} 
-          -DeploymentId ${{ needs.preflight.outputs.latestDeploymentId }}
+          -DeploymentId ${{ env.latestDeploymentId }}
           -DownloadFolder ${{GITHUB.WORKSPACE}}/patch
           -PipelineVendor GITHUB
 
@@ -66,7 +67,7 @@ jobs:
           path: ${{GITHUB.WORKSPACE}}/patch/git-patch.diff
           retention-days: 1
     outputs:
-      remoteChanges: steps.latest-changes.outputs.remoteChanges
+      remoteChanges: ${{ steps.latest-changes.outputs.remoteChanges }}  
 
   applyRemoteChanges:
     name: Apply remote changes
@@ -74,20 +75,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: hello
-        if: ${{ needs.checkForChanges.outputs.remoteChanges == 'yes' }}
+        env:
+          remoteChanges: ${{ needs.checkForChanges.outputs.remoteChanges }}
+        if: ${{ env.remoteChanges == 'yes' }}
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Get stored diff
-        if: ${{ needs.checkForChanges.outputs.remoteChanges == 'yes' }}
+        env:
+          remoteChanges: ${{ needs.checkForChanges.outputs.remoteChanges }}
+        if: ${{ env.remoteChanges == 'yes' }}
         uses: actions/download-artifact@v3
         with:
           name: git-patch
           path: ${{GITHUB.WORKSPACE}}/patch/git-patch.diff
       
       - name: Apply Change
-        if: ${{ needs.checkForChanges.outputs.remoteChanges == 'yes' }}
+        env:
+          remoteChanges: ${{ needs.checkForChanges.outputs.remoteChanges }}
+        if: ${{ env.remoteChanges == 'yes' }}
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
