@@ -133,7 +133,7 @@ jobs:
   publish:
     name: Zip and Publish to Cloud
     runs-on: ubuntu-latest
-    needs: [preflight, checkForChanges]
+    needs: [applyRemoteChanges]
     steps:
       - name: fail # fail fast before sending to cloud
         run: exit 1;
