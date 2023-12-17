@@ -54,7 +54,7 @@ jobs:
         run: get-content ${{GITHUB.WORKSPACE}}/patch/git-patch.diff
 
       - name: fail
-        if: ${{ steps.latest-deployment.outputs.latestDeploymentId != '' }}
+        if: ${{ steps.latest-deployment.outputs.latestDeploymentId == '' }}
         run: exit 1
 
   ## From Azure Devops
