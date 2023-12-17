@@ -75,7 +75,9 @@ jobs:
     steps:
       - name: hello
         if: ${{ needs.checkForChanges.outputs.remoteChanges == 'yes' }}
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Get stored diff
         if: ${{ needs.checkForChanges.outputs.remoteChanges == 'yes' }}
