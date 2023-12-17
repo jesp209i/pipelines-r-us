@@ -17,9 +17,9 @@ jobs:
   preflight:
     name: Preflight checks
     runs-on: ubuntu-latest
+    outputs: 
+      latestDeployemntId: steps.latest-deployment.outputs.latestDeploymentId
     steps:
-      - uses: actions/checkout@v3
-
       # Gets the latest CICD Flow deployment if there is any
       # Will write "latestDeploymentId" to pipeline variables, value can be an uuid or empty string 
       - name: Get Latest Deployment
@@ -30,22 +30,26 @@ jobs:
           -ProjectId ${{ env.projectId }} 
           -ApiKey ${{ env.umbracoCloudApiKey }} 
           -PipelineVendor GITHUB
-      
-      ## TODO: MISSING LOGIC
-      # If "latestDeploymentId" is '', then skip the ahead to "Prepare Cloud Git Ignore"
+
+  checkForChanges:
+    name: CHeck if there are changes since latest deployment
+    needs: preflight
+    if: ${{ needs.preflight.outputs.latestDeploymentId != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
 
       # Download git-patch file based on latest deployment
       # Will write "remoteChanges" to pipeline variables, value can be "yes" or "no"
       # When "remoteChanges" is yes, there will also be downloaded a patch-file to the path you specified in -DownloadFolder parameter
       - name: Fetch Changes From Cloud
-        if: ${{ steps.latest-deployment.outputs.latestDeploymentId != '' }}
         id: latest-changes
         shell: pwsh
         run: >
           ${{GITHUB.WORKSPACE}}/.github/powershell/get-changes-by-id.ps1 
           -ProjectId ${{ env.projectId }} 
           -ApiKey ${{ env.umbracoCloudApiKey }} 
-          -DeploymentId ${{ steps.latest-deployment.outputs.latestDeploymentId}}
+          -DeploymentId ${{ needs.preflight.outputs.latestDeploymentId }}
           -DownloadFolder ${{GITHUB.WORKSPACE}}/patch
           -PipelineVendor GITHUB
 
@@ -54,10 +58,16 @@ jobs:
         shell: pwsh
         run: get-content ${{GITHUB.WORKSPACE}}/patch/git-patch.diff
 
-      - name: fail
-        if: ${{ steps.latest-deployment.outputs.latestDeploymentId == '' }}
-        run: exit 1
+      - name: 'Store diff before applying'
+        if: ${{ steps.latest-changes.outputs.remoteChanges == 'yes' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: git-patch
+          path: ${{GITHUB.WORKSPACE}}/patch/git-patch.diff
+          retention-days: 1
 
+      - name: fail
+        run: exit 1;
   ## From Azure Devops
   #     - job: CheckRemoteChanges
   #       displayName: Check for remote changes since last deployment
