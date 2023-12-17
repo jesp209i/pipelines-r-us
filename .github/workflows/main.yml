@@ -74,11 +74,10 @@ jobs:
     needs: checkForChanges
     runs-on: ubuntu-latest
     steps:
-      - name: hello
+      - uses: actions/checkout@v4
         env:
           remoteChanges: ${{ needs.checkForChanges.outputs.remoteChanges }}
         if: ${{ env.remoteChanges == 'yes' }}
-        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -104,6 +103,7 @@ jobs:
           git push
 
   publish:
+    needs: applyRemoteChanges
     uses: jesp209i/pipelines-r-us/.github/workflows/deployment.yml@pwsh-get-changes
     with:
       projectId: ${{ vars.PROJECT_ID }}
