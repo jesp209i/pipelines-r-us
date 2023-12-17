@@ -22,6 +22,7 @@ jobs:
     steps:
       # Gets the latest CICD Flow deployment if there is any
       # Will write "latestDeploymentId" to pipeline variables, value can be an uuid or empty string 
+      - uses: actions/checkout@v3
       - name: Get Latest Deployment
         id: latest-deployment
         shell: pwsh
