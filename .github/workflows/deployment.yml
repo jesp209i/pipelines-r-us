@@ -89,7 +89,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: callUmbracoApi
     steps:
-      - uses: actions/checkout@4
+      - uses: actions/checkout@v4
 
       # Poll until deployment finishes 
       - name: Wait for deployment completed 
