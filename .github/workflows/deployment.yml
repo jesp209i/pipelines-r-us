@@ -16,7 +16,7 @@ env:
 
 jobs:
   prepareDeployment:
-    name: Prepare Deployment
+    name: Prepare Deployment to cloud
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -30,6 +30,13 @@ jobs:
       - name: Zip Source Code
         run: zip -r sources.zip . -x@cloud.zipignore
         shell: bash
+
+      - name: Store package for upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: source-artifact
+          path: ${{GITHUB.WORKSPACE}}/sources.zip
+          retention-days: 1
     
   callUmbracoApi:
     name: Upload Source And Start Deployment
@@ -39,6 +46,11 @@ jobs:
       runningDeploymentId: ${{ steps.deployment-meta.outputs.deploymentId }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Get package for upload
+        uses: actions/download-artifact@v3
+        with:
+            name: source-artifact
 
       # Request to prepare a deployment
       # - sets the commit message to be used in cloud 
@@ -73,7 +85,7 @@ jobs:
           -ApiKey ${{ env.umbracoCloudApiKey }}
 
   awaitDeploymentFinished:
-    name: Await finished deployment
+    name: Await deployment to finish
     runs-on: ubuntu-latest
     needs: callUmbracoApi
     steps:
