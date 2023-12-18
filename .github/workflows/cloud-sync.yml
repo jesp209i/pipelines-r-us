@@ -73,7 +73,7 @@ jobs:
 
   applyRemoteChanges:
     name: Apply remote changes
-    needs: checkForChanges
+    needs: [preflight, checkForChanges]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -95,11 +95,12 @@ jobs:
       - name: Apply Change
         env:
           remoteChanges: ${{ needs.checkForChanges.outputs.remoteChanges }}
+          latestDeploymentId: ${{ needs.preflight.outputs.latestDeployemntId }}
         if: ${{ env.remoteChanges == 'yes' }}
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           git apply ${{GITHUB.WORKSPACE}}/patch/git-patch.diff
           git add *
-          git commit -m "Adding changes in pipeline [skip ci]"
+          git commit -m "Adding cloud changes since deployment ${{ env.latestDeploymentId }} [skip ci]"
           git push
