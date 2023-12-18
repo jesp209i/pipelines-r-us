@@ -26,7 +26,7 @@ jobs:
         id: latest-deployment
         shell: pwsh
         run: >
-          ${{GITHUB.WORKSPACE}}/.github/powershell/get-latest-deployment.ps1 
+          ${{GITHUB.WORKSPACE}}/.github/powershell/Get-LatestDeployment.ps1 
           -ProjectId ${{ env.projectId }} 
           -ApiKey ${{ env.umbracoCloudApiKey }} 
           -PipelineVendor GITHUB
@@ -49,7 +49,7 @@ jobs:
         id: latest-changes
         shell: pwsh
         run: >
-          ${{GITHUB.WORKSPACE}}/.github/powershell/get-changes-by-id.ps1 
+          ${{GITHUB.WORKSPACE}}/.github/powershell/Get-ChangesById.ps1 
           -ProjectId ${{ env.projectId }} 
           -ApiKey ${{ env.umbracoCloudApiKey }} 
           -DeploymentId ${{ env.latestDeploymentId }}

@@ -20,9 +20,9 @@ jobs:
     secrets:
       umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
 
-  publish:
+  cloud-deployment:
     needs: cloud-sync
-    uses: jesp209i/pipelines-r-us/.github/workflows/deployment.yml@pwsh-get-changes
+    uses: jesp209i/pipelines-r-us/.github/workflows/cloud-deployment.yml@pwsh-get-changes
     with:
       projectId: ${{ vars.PROJECT_ID }}
     secrets:

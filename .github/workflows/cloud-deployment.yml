@@ -59,7 +59,7 @@ jobs:
         id: deployment-meta
         shell: pwsh
         run: >
-          ${{GITHUB.WORKSPACE}}/.github/powershell/new-deployment.ps1 
+          ${{GITHUB.WORKSPACE}}/.github/powershell/New-Deployment.ps1 
           -ProjectId ${{ env.projectId }} 
           -ApiKey ${{ env.umbracoCloudApiKey }} 
           -CommitMessage "Run number ${{github.run_number}}" 
@@ -69,7 +69,7 @@ jobs:
       - name: Post Zipped Artifact
         shell: pwsh
         run: >
-          ${{GITHUB.WORKSPACE}}/.github/powershell/add-deployment-package.ps1 
+          ${{GITHUB.WORKSPACE}}/.github/powershell/Add-DeploymentPackage.ps1 
           -ProjectId ${{ env.projectId }} 
           -DeploymentId ${{ steps.deployment-meta.outputs.deploymentId }} 
           -ApiKey ${{ env.umbracoCloudApiKey }} 
@@ -79,7 +79,7 @@ jobs:
       - name: Request Start Deployment
         shell: pwsh
         run: >
-          ${{GITHUB.WORKSPACE}}/.github/powershell/start-deployment.ps1 
+          ${{GITHUB.WORKSPACE}}/.github/powershell/Start-Deployment.ps1 
           -ProjectId ${{ env.projectId }} 
           -DeploymentId ${{ steps.deployment-meta.outputs.deploymentId }} 
           -ApiKey ${{ env.umbracoCloudApiKey }}
@@ -97,7 +97,7 @@ jobs:
         env: 
           runningDeploymentId: ${{ needs.callUmbracoApi.outputs.runningDeploymentId }}
         run: >
-          ${{GITHUB.WORKSPACE}}/.github/powershell/test-deployment-status.ps1 
+          ${{GITHUB.WORKSPACE}}/.github/powershell/Test-DeploymentStatus.ps1 
           -ProjectId ${{ env.projectId }} 
           -DeploymentId ${{ env.runningDeploymentId }} 
           -ApiKey ${{ env.umbracoCloudApiKey }}
