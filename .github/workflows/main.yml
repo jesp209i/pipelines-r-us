@@ -8,10 +8,6 @@ on:
      - powershell
      - pwsh-get-changes
 
-env:
-  projectId: ${{ vars.PROJECT_ID }}
-  umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
-
 jobs:
   cloud-sync:
     uses: jesp209i/pipelines-r-us/.github/workflows/cloud-sync.yml@pwsh-get-changes
