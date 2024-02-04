@@ -7,7 +7,7 @@ on:
 
 jobs:
   cloud-sync:
-    uses: ./.github/workflows/sync/cloud-sync.yml
+    uses: ./.github/workflows/cloud-sync.yml
     with:
       projectId: ${{ vars.PROJECT_ID }}
     secrets:
@@ -15,7 +15,7 @@ jobs:
 
   cloud-deployment:
     needs: cloud-sync
-    uses: ./.github/workflows/deployment/cloud-deployment.yml
+    uses: ./.github/workflows/cloud-deployment.yml
     with:
       projectId: ${{ vars.PROJECT_ID }}
     secrets:

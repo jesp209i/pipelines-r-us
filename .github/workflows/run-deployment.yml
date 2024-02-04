@@ -4,7 +4,7 @@ on: workflow_dispatch
 
 jobs:
   cloud-deployment:
-    uses: ./.github/workflows/deployment/cloud-deployment.yml
+    uses: ./.github/workflows/cloud-deployment.yml
     with:
       projectId: ${{ vars.PROJECT_ID }}
     secrets:
