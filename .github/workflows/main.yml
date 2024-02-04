@@ -7,7 +7,7 @@ on:
 
 jobs:
   cloud-sync:
-    uses: jesp209i/pipelines-r-us/.github/workflows/cloud-sync.yml@pwsh-get-changes
+    uses: ./.github/workflows/cloud-sync.yml
     with:
       projectId: ${{ vars.PROJECT_ID }}
     secrets:
@@ -15,7 +15,7 @@ jobs:
 
   cloud-deployment:
     needs: cloud-sync
-    uses: jesp209i/pipelines-r-us/.github/workflows/cloud-deployment.yml@pwsh-get-changes
+    uses: ./.github/workflows/cloud-deployment.yml
     with:
       projectId: ${{ vars.PROJECT_ID }}
     secrets:

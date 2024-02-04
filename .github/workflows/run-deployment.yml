@@ -4,7 +4,7 @@ on: workflow_dispatch
 
 jobs:
   cloud-deployment:
-    uses: jesp209i/pipelines-r-us/.github/workflows/cloud-deployment.yml@pwsh-get-changes
+    uses: ./.github/workflows/cloud-deployment.yml
     with:
       projectId: ${{ vars.PROJECT_ID }}
     secrets:
