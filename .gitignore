@@ -420,3 +420,4 @@ healthchecksdb
 # Ignore js build assets
 **/wwwroot/app/
 **/git-patch.diff
+

@@ -4,9 +4,6 @@ on:
   push:
     branches:
      - main
-     - using_project-id
-     - powershell
-     - pwsh-get-changes
 
 jobs:
   cloud-sync:
