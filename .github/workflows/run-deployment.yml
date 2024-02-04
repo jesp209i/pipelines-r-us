@@ -1,8 +1,21 @@
-name: Manual Cloud Deployment
+name: Manual Umbraco Cloud Deployment
 
-on: workflow_dispatch
+on: 
+  workflow_dispatch:
+    inputs:
+      perform_sync:
+        description: 'Run Sync operation First'
+        type: boolean
+        default: true
 
 jobs:
+  cloud-sync:
+    uses: ./.github/workflows/cloud-sync.yml
+    if: ${{ inputs.perform_sync }}
+    with:
+      projectId: ${{ vars.PROJECT_ID }}
+    secrets:
+      umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
   cloud-deployment:
     uses: ./.github/workflows/cloud-deployment.yml
     with:
