@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
-
+// change
 export default defineConfig({
   build: {
     outDir: 'src/MyAwesomeProject.Web/wwwroot/app/', // inside the Umbraco project

@@ -2,6 +2,9 @@
 
 public class Class1
 {
- // code change
+ public Class1()
+ {
+  
+ }
 
 }

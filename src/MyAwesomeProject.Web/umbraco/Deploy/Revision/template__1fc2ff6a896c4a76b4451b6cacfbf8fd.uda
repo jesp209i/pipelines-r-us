@@ -1,0 +1,14 @@
+{
+  "Name": "simple doctype",
+  "Alias": "simpleDoctype",
+  "File": "umb://template-file/simpleDoctype.cshtml",
+  "Udi": "umb://template/1fc2ff6a896c4a76b4451b6cacfbf8fd",
+  "Dependencies": [
+    {
+      "Udi": "umb://template-file/simpleDoctype.cshtml",
+      "Ordering": true
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.TemplateArtifact",
+  "__version": "13.0.0"
+}

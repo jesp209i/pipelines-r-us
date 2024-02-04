@@ -2,112 +2,21 @@ name: pipeline
 
 on:
   push:
-    branches: [ main, using_project_id ]
-    
+    branches:
+     - main
 
-env:
-  PATH_TO_CSPROJ: src/UmbracoProject/UmbracoProject.csproj
-  PROJECT_ALIAS: pipelines-r-us
-      
 jobs:
-#  build:
-#    name: Build and test
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#      - name: Setup .Net Core
-#        uses: actions/setup-dotnet@v3
-#        with:
-#          dotnet-version: '7.0.x'
-          
-#      - name: Install Dependencies
-#        run: dotnet restore $PATH_TO_CSPROJ
-        
-#      - name: Build
-#        run: dotnet build $PATH_TO_CSPROJ --configuration Release --no-restore
-        
-#      - name: Test
-#        run: dotnet test $PATH_TO_CSPROJ --no-restore --verbosity normal
-#  preflight:
-#    name: Deployment Preflight Check
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#      - uses: actions/setup-node@v3
-#        with:
-#          node-version: 14.x
-#      - name: Check for changes in Cloud 
-#        id: cloud-changes
-#        uses: jesp209i/uc-changes-since-last-deployment@v0.1-beta25
-#        with:
-#          project-alias: ${{ env.PROJECT_ALIAS }}
-#          api-key: ${{ secrets.API_KEY }}
-#          workspace: ${{ github.workspace }}
-#
-#      - name: apply changes to new branch
-#        id: make-branch-changes
-#        if: steps.cloud-changes.outputs.REMOTE_CHANGES == 'true'
-#        run: |
-#          git config user.name "Build pipeline"
-#          git config user.email jam@umbraco.dk
-#          git switch -c auto/merge_remote_changes_for_${{github.run_number}}
-#          git apply -v ${{steps.cloud-changes.outputs.PATCH_FILE}}
-#          git add -A
-#          git commit -m "Auto updated changes from remote for build ${{github.run_number}}" .
-#          git push --set-upstream origin auto/merge_remote_changes_for_${{github.run_number}}
-#          echo "Please take a look at the new branch: auto/merge_remote_changes_for_${{github.run_number}}"
-#        shell: bash
-#    outputs:
-#      remote-changes: ${{ steps.cloud-changes.outputs.REMOTE_CHANGES}}
-     
-  publish:
-    name: Publish to Cloud
-#    needs: preflight
-#    if: needs.preflight.outputs.remote-changes == 'false'
-    runs-on: ubuntu-latest
-    steps:
-      - name: build frontend
-        uses: actions/checkout@v3
-      
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 14.x
-      - run: npm i && npm run build
+  cloud-sync:
+    uses: jesp209i/pipelines-r-us/.github/workflows/cloud-sync.yml@pwsh-get-changes
+    with:
+      projectId: ${{ vars.PROJECT_ID }}
+    secrets:
+      umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
 
-      - name: Create Deployment Meta
-        id: deployment-meta
-        uses: jesp209i/uc-prepare-deployment-action@v0.0.7-beta1
-        with:
-          project-alias: ${{ env.PROJECT_ALIAS }}
-          api-key: ${{ secrets.API_KEY }}
-          commit-message: "Run number ${{github.run_number}}"
-
-      - name: Prepare Cloud Git Ignore
-        run: cp cloud.gitignore .gitignore
-        shell: bash
-      - name: Zip Source Code
-        run: zip -r sources.zip . -x@.zipignore
-        shell: bash
-     
-      - name: Upload Artifact
-        uses: jesp209i/uc-upload-deployment@v0.3-beta3
-        with:
-          project-alias: ${{ env.PROJECT_ALIAS }}
-          deployment-id: ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }}
-          api-key: ${{ secrets.API_KEY }}
-          file-path: "${{ github.workspace }}/sources.zip"
-      
-      - name: Request Start Deployment
-        uses: jesp209i/uc-start-deployment@v0.2-beta1
-        with:
-          project-alias: ${{ env.PROJECT_ALIAS }}
-          deployment-id: ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }}
-          api-key: ${{ secrets.API_KEY }}
-        
-      - name: Wait for deployment completed
-        uses: jesp209i/uc-deployment-status@v0.2-beta13
-        with:
-          project-alias: ${{ env.PROJECT_ALIAS }}
-          deployment-id: ${{ steps.deployment-meta.outputs.DEPLOYMENT_ID }}
-          api-key: ${{ secrets.API_KEY }}
-          timeout-seconds: 600
+  cloud-deployment:
+    needs: cloud-sync
+    uses: jesp209i/pipelines-r-us/.github/workflows/cloud-deployment.yml@pwsh-get-changes
+    with:
+      projectId: ${{ vars.PROJECT_ID }}
+    secrets:
+      umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}

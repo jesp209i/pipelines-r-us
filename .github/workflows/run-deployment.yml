@@ -1,0 +1,11 @@
+name: Manual Cloud Deployment
+
+on: workflow_dispatch
+
+jobs:
+  cloud-deployment:
+    uses: jesp209i/pipelines-r-us/.github/workflows/cloud-deployment.yml@pwsh-get-changes
+    with:
+      projectId: ${{ vars.PROJECT_ID }}
+    secrets:
+      umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
