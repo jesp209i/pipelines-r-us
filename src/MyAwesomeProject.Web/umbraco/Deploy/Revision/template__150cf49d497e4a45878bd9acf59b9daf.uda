@@ -2,15 +2,13 @@
   "Name": "New Doc Type",
   "Alias": "NewDocType",
   "File": "umb://template-file/NewDocType.cshtml",
-  "Master": null,
   "Udi": "umb://template/150cf49d497e4a45878bd9acf59b9daf",
   "Dependencies": [
     {
       "Udi": "umb://template-file/NewDocType.cshtml",
-      "Ordering": true,
-      "Mode": 0
+      "Ordering": true
     }
   ],
   "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.TemplateArtifact",
-  "__version": "11.1.2"
+  "__version": "13.0.0"
 }

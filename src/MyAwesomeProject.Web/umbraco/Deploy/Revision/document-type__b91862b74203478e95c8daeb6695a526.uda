@@ -1,0 +1,51 @@
+{
+  "Name": "new new doctype",
+  "Alias": "newNewDoctype",
+  "DefaultTemplate": "umb://template/c8e7c32016d04f0ea023081f4b139b90",
+  "AllowedTemplates": [
+    "umb://template/c8e7c32016d04f0ea023081f4b139b90"
+  ],
+  "HistoryCleanup": {},
+  "Icon": "icon-document",
+  "Thumbnail": "folder.png",
+  "Permissions": {
+    "AllowedChildContentTypes": []
+  },
+  "CompositionContentTypes": [],
+  "PropertyGroups": [
+    {
+      "Key": "632ca5a6-ab84-439d-8032-98eda23dc69b",
+      "Name": "Page Content",
+      "Alias": "pageContent",
+      "PropertyTypes": [
+        {
+          "Key": "b46ed9b3-052e-4da6-909a-d56a2f8e7816",
+          "Alias": "moreText",
+          "DataType": "umb://data-type/0cc0eba1996042c9bf9b60e150b429ae",
+          "Name": "more text",
+          "SortOrder": 1
+        },
+        {
+          "Key": "cbf66631-23bd-4728-970e-8f5a7b3478db",
+          "Alias": "heroTitle",
+          "DataType": "umb://data-type/0cc0eba1996042c9bf9b60e150b429ae",
+          "Name": "hero title"
+        }
+      ]
+    }
+  ],
+  "PropertyTypes": [],
+  "Udi": "umb://document-type/b91862b74203478e95c8daeb6695a526",
+  "Dependencies": [
+    {
+      "Udi": "umb://data-type/0cc0eba1996042c9bf9b60e150b429ae",
+      "Ordering": true
+    },
+    {
+      "Udi": "umb://template/c8e7c32016d04f0ea023081f4b139b90",
+      "Ordering": true
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.ContentType.DocumentTypeArtifact",
+  "__version": "13.0.0"
+}
