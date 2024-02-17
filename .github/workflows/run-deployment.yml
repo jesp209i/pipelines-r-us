@@ -1,4 +1,4 @@
-name: ":arrow-forward: Manual Umbraco Cloud Deployment"
+name: 🏎️ Manual Umbraco Cloud Deployment
 
 on: 
   workflow_dispatch:
