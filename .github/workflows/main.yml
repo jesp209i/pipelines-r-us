@@ -1,4 +1,4 @@
-name: Main Cloud Deployment pipeline
+name: ":rocket: Main Cloud Deployment pipeline"
 
 on:
   push:

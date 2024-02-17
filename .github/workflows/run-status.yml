@@ -1,4 +1,4 @@
-name: Manual Umbraco Cloud Deployment Status
+name: ":interrobang: Manual Umbraco Cloud Deployment Status"
 
 on: 
   workflow_dispatch:
@@ -18,7 +18,7 @@ jobs:
             runningDeploymentId: ${{ inputs.deployment_id }}
         steps:
             - uses: actions/checkout@v4
-            - name: Wait for deployment completed 
+            - name: Get status of deployment 
               shell: pwsh
               run: >
                 ${{GITHUB.WORKSPACE}}/.github/powershell/Test-DeploymentStatus.ps1 
