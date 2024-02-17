@@ -25,3 +25,4 @@ jobs:
                 -ProjectId ${{ env.projectId }} 
                 -DeploymentId ${{ env.runningDeploymentId }} 
                 -ApiKey ${{ env.apiKey }}
+                -UseHardFail 0
