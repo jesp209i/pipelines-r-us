@@ -1,0 +1,27 @@
+name: Manual Umbraco Cloud Deployment Status
+
+on: 
+  workflow_dispatch:
+    inputs:
+      deployment_id:
+        description: 'DeploymentId'
+        type: string
+        required: true
+
+jobs:
+    cloud-deployment-status:
+        name: Get Deployment Status Manually
+        runs-on: ubuntu-latest
+        env: 
+            projectId: ${{ vars.PROJECT_ID}}
+            apiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY}}
+            runningDeploymentId: ${{ inputs.deployment_id }}
+        steps:
+            - uses: actions/checkout@v4
+            - name: Wait for deployment completed 
+              shell: pwsh
+              run: >
+                ${{GITHUB.WORKSPACE}}/.github/powershell/Test-DeploymentStatus.ps1 
+                -ProjectId ${{ env.projectId }} 
+                -DeploymentId ${{ env.runningDeploymentId }} 
+                -ApiKey ${{ env.apiKey }}
