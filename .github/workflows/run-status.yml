@@ -1,4 +1,4 @@
-name: ":interrobang: Manual Umbraco Cloud Deployment Status"
+name: 💫 Manual Run Deployment Status 
 
 on: 
   workflow_dispatch:
