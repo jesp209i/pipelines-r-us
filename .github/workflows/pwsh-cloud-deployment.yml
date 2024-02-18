@@ -11,7 +11,7 @@ on:
         required: true
 
 env:
-  projectId: ${{ inputs.projectId }}
+  projectId: ${{ secrets.projectId }}
   umbracoCloudApiKey: ${{ secrets.umbracoCloudApiKey }}
 
 jobs:
