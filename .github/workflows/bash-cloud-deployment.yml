@@ -1,10 +1,12 @@
-name: Deploy To Cloud
+name: (BASH) Deploy To Cloud
 
 on:
   workflow_call:
-    secrets:
+    inputs: 
       projectId: 
         required: true
+        type: string
+    secrets:
       umbracoCloudApiKey:
         required: true
 

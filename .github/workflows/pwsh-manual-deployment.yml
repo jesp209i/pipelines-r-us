@@ -13,7 +13,7 @@ on:
 jobs:
   cloud-sync:
     name: "Synchronize with Cloud"
-    uses: ./.github/workflows/cloud-sync.yml
+    uses: ./.github/workflows/pwsh-cloud-sync.yml
     if: ${{ inputs.perform_sync }}
     with:
       projectId: ${{ vars.PROJECT_ID }}
@@ -23,7 +23,7 @@ jobs:
   # Package and Deploy to Umbraco Cloud
   cloud-deployment:
     name: "Deploy to Cloud"
-    uses: ./.github/workflows/cloud-deployment.yml
+    uses: ./.github/workflows/pwsh-cloud-deployment.yml
     with:
       projectId: ${{ vars.PROJECT_ID }}
     secrets:

@@ -1,4 +1,4 @@
-name: Umbraco Cloud Sync
+name: (pwsh) Umbraco Cloud Sync
 
 on:
   workflow_call:

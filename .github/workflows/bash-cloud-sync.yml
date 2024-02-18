@@ -1,15 +1,17 @@
-name: Umbraco Cloud Sync
+name: (BASH) Umbraco Cloud Sync
 
 on:
   workflow_call:
-    secrets:
+    inputs: 
       projectId: 
         required: true
+        type: string
+    secrets:
       umbracoCloudApiKey:
         required: true
   
 env:
-  projectId: ${{ secrets.projectId }}
+  projectId: ${{ inputs.projectId }}
   umbracoCloudApiKey: ${{ secrets.umbracoCloudApiKey }}
 
 jobs:
