@@ -27,7 +27,7 @@ jobs:
     needs: cloud-sync
     if: ${{ success() || inputs.perform_sync == false}}
     steps:
-      - run: echo "Doing Deployment"
+      - run: echo "Ready to run deployment"
   
   # Package and Deploy to Umbraco Cloud
   cloud-deployment:
