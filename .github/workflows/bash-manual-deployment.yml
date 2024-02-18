@@ -13,29 +13,25 @@ on:
 jobs:
   cloud-sync:
     name: "Synchronize with Cloud"
-    runs-on: ubuntu-latest
-    env: 
+    uses: ./.github/workflows/pwsh-cloud-sync.yml
+    if: ${{ inputs.perform_sync }}
+    with:
       projectId: ${{ vars.PROJECT_ID }}
-      apiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
+    secrets:
+      umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
+
+  confitional-flow:
+    name: hest
+    runs-on: ubuntu-latest
+    if: ${{ success() || inputs.perform_sync == false}}
     steps:
-    - uses: actions/checkout@v4
-    - name: Run sync
-      uses: ./.github/workflows/bash-cloud-sync.yml
-      if: ${{ inputs.perform_sync }}
-      with:
-        projectId: ${{ env.projectId }}
-        umbracoCloudApiKey: ${{ env.apiKey }}
-
-    - name: Skip sync
-      if: ${{ inputs.perform_sync == false}}
-      run: exit 0
-
+      - run: echo "Doing Deployment"
   
   # Package and Deploy to Umbraco Cloud
   cloud-deployment:
     name: "Deploy to Cloud"
     uses: ./.github/workflows/bash-cloud-deployment.yml
-    needs: cloud-sync
+    needs: confitional-flow
     with:
       projectId: ${{ vars.PROJECT_ID }}
     secrets:
