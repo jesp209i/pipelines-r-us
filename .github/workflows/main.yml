@@ -1,4 +1,4 @@
-name: 🚀 Cloud Deployment pipeline
+name: 🚀 (pwsh) Umbraco Cloud Deployment pipeline
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 jobs:
   cloud-sync:
     name: "Syncronize with Cloud"
-    uses: ./.github/workflows/cloud-sync.yml
+    uses: ./.github/workflows/pwsh-cloud-sync.yml
     with:
       projectId: ${{ vars.PROJECT_ID }}
     secrets:
@@ -17,7 +17,7 @@ jobs:
   cloud-deployment:
     name: "Deploy to Cloud"
     needs: cloud-sync
-    uses: ./.github/workflows/cloud-deployment.yml
+    uses: ./.github/workflows/pwsh-cloud-deployment.yml
     with:
       projectId: ${{ vars.PROJECT_ID }}
     secrets:

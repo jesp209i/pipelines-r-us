@@ -1,5 +1,7 @@
-name: 🏎️ Manual Umbraco Cloud Deployment
+name: 🏎️ (BASH) Manual Umbraco Cloud Deployment
 
+# Manually trigger and run deployment
+# Optionally skip the cloud-sync
 on: 
   workflow_dispatch:
     inputs:
@@ -10,14 +12,18 @@ on:
 
 jobs:
   cloud-sync:
-    uses: ./.github/workflows/cloud-sync.yml
+    name: "Synchronize with Cloud"
+    uses: ./.github/workflows/bash-cloud-sync.yml
     if: ${{ inputs.perform_sync }}
     with:
       projectId: ${{ vars.PROJECT_ID }}
     secrets:
       umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
+  
+  # Package and Deploy to Umbraco Cloud
   cloud-deployment:
-    uses: ./.github/workflows/cloud-deployment.yml
+    name: "Deploy to Cloud"
+    uses: ./.github/workflows/bash-cloud-deployment.yml
     with:
       projectId: ${{ vars.PROJECT_ID }}
     secrets:

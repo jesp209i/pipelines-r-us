@@ -1,5 +1,7 @@
-name: 💫 Manual Run Deployment Status 
+name: 💫 (pwsh) Manual Run Deployment Status 
 
+# Manually trigger a deployemnt status
+# DeploymentId required
 on: 
   workflow_dispatch:
     inputs:
@@ -15,7 +17,7 @@ jobs:
         env: 
             projectId: ${{ vars.PROJECT_ID}}
             apiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY}}
-            runningDeploymentId: ${{ inputs.deployment_id }}
+            deploymentId: ${{ inputs.deployment_id }}
         steps:
             - uses: actions/checkout@v4
             - name: Get status of deployment 
@@ -23,6 +25,6 @@ jobs:
               run: >
                 ${{GITHUB.WORKSPACE}}/.github/powershell/Test-DeploymentStatus.ps1 
                 -ProjectId ${{ env.projectId }} 
-                -DeploymentId ${{ env.runningDeploymentId }} 
+                -DeploymentId ${{ env.deploymentId }} 
                 -ApiKey ${{ env.apiKey }}
                 -UseHardFail 0

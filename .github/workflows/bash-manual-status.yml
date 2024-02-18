@@ -1,0 +1,31 @@
+name: 💫 (BASH) Manual Run Deployment Status (Hack)
+
+# Manually trigger a deployment status
+# DeploymentId required
+on: 
+  workflow_dispatch:
+    inputs:
+      deployment_id:
+        description: 'DeploymentId'
+        type: string
+        required: true
+
+jobs:
+    cloud-deployment-status:
+        name: Get Deployment Status Manually
+        runs-on: ubuntu-latest
+        env: 
+            projectId: ${{ vars.PROJECT_ID}}
+            apiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY}}
+            deploymentId: ${{ inputs.deployment_id }}
+        steps:
+          - uses: actions/checkout@v4
+          - name: Get status of deployment 
+            shell: bash
+            run: >
+              bash ${{GITHUB.WORKSPACE}}/.github/scripts/get_deployment_status.sh 
+              ${{ env.projectId }} 
+              ${{ env.deploymentId }} 
+              ${{ env.apiKey }}
+              "false"
+        
