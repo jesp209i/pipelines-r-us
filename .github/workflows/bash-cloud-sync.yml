@@ -2,11 +2,9 @@ name: (BASH) Umbraco Cloud Sync
 
 on:
   workflow_call:
-    inputs: 
+    secrets:
       projectId: 
         required: true
-        type: string
-    secrets:
       umbracoCloudApiKey:
         required: true
   
