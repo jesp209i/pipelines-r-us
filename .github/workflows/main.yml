@@ -1,4 +1,4 @@
-name: 🚀 (pwsh) Umbraco Cloud Deployment pipeline
+name: (pwsh) 🚀 Umbraco Cloud Deployment pipeline
 
 on:
   push:
