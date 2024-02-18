@@ -10,7 +10,7 @@ jobs:
     name: "Syncronize with Cloud"
     uses: ./.github/workflows/pwsh-cloud-sync.yml
     with:
-      projectId: ${{ vars.PROJECT_ID }}
+      projectId: ${{ secrets.PROJECT_ID }}
     secrets:
       umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
 
@@ -19,6 +19,6 @@ jobs:
     needs: cloud-sync
     uses: ./.github/workflows/pwsh-cloud-deployment.yml
     with:
-      projectId: ${{ vars.PROJECT_ID }}
+      projectId: ${{ secrets.PROJECT_ID }}
     secrets:
       umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}

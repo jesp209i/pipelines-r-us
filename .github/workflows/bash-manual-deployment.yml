@@ -16,7 +16,7 @@ jobs:
     uses: ./.github/workflows/pwsh-cloud-sync.yml
     if: ${{ inputs.perform_sync }}
     with:
-      projectId: ${{ vars.PROJECT_ID }}
+      projectId: ${{ secrets.PROJECT_ID }}
     secrets:
       umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
 
@@ -36,6 +36,6 @@ jobs:
     needs: confitional-flow
     if: always()
     with:
-      projectId: ${{ vars.PROJECT_ID }}
+      projectId: ${{ secrets.PROJECT_ID }}
     secrets:
       umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
