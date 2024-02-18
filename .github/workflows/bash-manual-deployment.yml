@@ -18,6 +18,7 @@ jobs:
       projectId: ${{ vars.PROJECT_ID }}
       apiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
     steps:
+    - uses: actions/checkout@v4
     - name: Run sync
       uses: ./.github/workflows/bash-cloud-sync.yml
       if: ${{ inputs.perform_sync }}
