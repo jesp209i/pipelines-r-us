@@ -1,6 +1,6 @@
 name: 🏎️ (pwsh) Manual Umbraco Cloud Deployment (Hack)
 
-# Manually trigger and run run
+# Manually trigger and run deployment
 # Optionally skip the cloud-sync
 on: 
   workflow_dispatch:
