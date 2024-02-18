@@ -24,6 +24,7 @@ jobs:
   cloud-deployment:
     name: "Deploy to Cloud"
     uses: ./.github/workflows/bash-cloud-deployment.yml
+    needs: cloud-sync
     with:
       projectId: ${{ vars.PROJECT_ID }}
     secrets:
