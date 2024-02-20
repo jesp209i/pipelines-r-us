@@ -1,0 +1,3 @@
+﻿[project]
+base = "src/MyAwesomeProject.Web"
+csproj = "MyAwesomeProject.Web.csproj"
