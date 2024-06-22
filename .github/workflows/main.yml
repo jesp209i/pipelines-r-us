@@ -15,6 +15,7 @@ jobs:
   cloud-sync:
     name: "Syncronize with Cloud"
     uses: ./.github/workflows/pwsh-cloud-sync.yml
+    if: ${{ inputs.perform_sync }}
     secrets:
       projectId: ${{ secrets.PROJECT_ID }}
       umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
