@@ -31,7 +31,7 @@ jobs:
   # Package and Deploy to Umbraco Cloud
   cloud-deployment:
     name: "Deploy to Cloud"
-    uses: ./.github/workflows/cloud-deployment.yml
+    uses: ./.github/workflows/pwsh-cloud-deployment.yml
     needs: conditional-flow
     if: always()
     secrets:
