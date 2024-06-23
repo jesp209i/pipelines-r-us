@@ -103,6 +103,14 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
+          git apply $PatchFilePath --check
+          if (-not $?){
+              Write-Host "================================================="
+              Write-Host "Check indicates that we cannot automatically apply the changes coming from Cloud"
+              Write-Host "You will have to handle this conflict manually"
+              Write-Host "See errors above"
+              exit 1
+          }
           git apply ${{GITHUB.WORKSPACE}}/patch/git-patch.diff
           git add *
           git commit -m "Adding cloud changes since deployment ${{ env.latestDeploymentId }} [skip ci]"

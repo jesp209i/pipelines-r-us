@@ -18,16 +18,7 @@ jobs:
     if: ${{ GITHUB.EVENT_NAME == 'push' || ( GITHUB.EVENT_NAME == 'workflow_dispatch' && inputs.perform_cloud_sync == true) }}
     secrets:
       projectId: ${{ secrets.PROJECT_ID }}
-      umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
-
-  # this job is here to prevent deployment to start before the optional cloud-sync job has been done
- # conditional-flow:
- #   name: Intermission
- #   runs-on: ubuntu-latest
- #   needs: cloud-sync
- #   if: ${{ success() || inputs.perform_sync == false}}
- #   steps:
- #     - run: echo "Ready to run deployment"      
+      umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}   
 
   # Package and Deploy to Umbraco Cloud
   cloud-deployment:
