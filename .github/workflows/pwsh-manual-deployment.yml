@@ -1,9 +1,8 @@
-name: (pwsh) 🚀 Umbraco Cloud Deployment pipeline
+name: (pwsh) 🏎️ Manual Umbraco Cloud Deployment
 
-on:
-  push:
-    branches:
-     - main
+# Manually trigger and run deployment
+# Optionally skip the cloud-sync
+on: 
   workflow_dispatch:
     inputs:
       perform_sync:
@@ -13,14 +12,15 @@ on:
 
 jobs:
   cloud-sync:
-    name: "Syncronize with Cloud"
+    name: "Synchronize with Cloud"
     uses: ./.github/workflows/pwsh-cloud-sync.yml
+    if: ${{ inputs.perform_sync }}
     secrets:
       projectId: ${{ secrets.PROJECT_ID }}
       umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
 
   # this job is here to prevent deployment to start before the optional cloud-sync job has been done
-  conditional-flow:
+  confitional-flow:
     name: Determining manual run flow
     runs-on: ubuntu-latest
     needs: cloud-sync
@@ -32,7 +32,7 @@ jobs:
   cloud-deployment:
     name: "Deploy to Cloud"
     uses: ./.github/workflows/pwsh-cloud-deployment.yml
-    needs: conditional-flow
+    needs: confitional-flow
     if: always()
     secrets:
       projectId: ${{ secrets.PROJECT_ID }}
