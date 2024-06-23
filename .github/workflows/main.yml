@@ -11,11 +11,14 @@ on:
         type: boolean
         default: true
 
+env:
+  PERFORM_SYNC: ${{ inputs.perform_sync == null || inputs.perform_sync == true}}
+
 jobs:
   cloud-sync:
     name: "Syncronize with Cloud"
     uses: ./.github/workflows/pwsh-cloud-sync.yml
-    if: ${{ inputs.perform_sync != false }}
+    if: ${{ env.PERFORM_SYNC == true }}
     secrets:
       projectId: ${{ secrets.PROJECT_ID }}
       umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
