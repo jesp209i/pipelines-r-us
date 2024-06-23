@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: "show my context"
         shell: pwsh
-        run: Write-Host ${{GITHUB.EVENT.type}}
+        run: Write-Host ${{GITHUB.EVENT_NAME}}
 
 #  cloud-sync:
 #    name: "Syncronize with Cloud"
