@@ -6,12 +6,6 @@
       "Id": "e297a8a0-5e47-4181-9cce-aea04f8fb020",
       "Workspaces": [
         {
-          "Id": "f59f6196-7b00-478f-b1e8-e624baa1c089",
-          "Name": "Development",
-          "Type": "development",
-          "Url": "https://dev-pipelines-r-us.euwest01.umbraco.io"
-        },
-        {
           "Id": "c155312e-7f42-4f6b-a856-6eeb27835c6e",
           "Name": "Live",
           "Type": "live",
