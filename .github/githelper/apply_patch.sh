@@ -16,8 +16,8 @@ if [[ -z "$gitUserEmail" ]]; then
     gitUserEmail="github-actions@github.com"
 fi
 
-git config --global user.name "$githubUserName"
-git config --global user.email "$githubUserEmail"
+git config user.name "$gitUserName"
+git config user.email "$gitUserEmail"
 # Check if the patch has been applied already, skip if it has
 if git apply "$patchFile" --reverse --ignore-space-change --ignore-whitespace --check; then
     echo "Patch already applied, exit"
