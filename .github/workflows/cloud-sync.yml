@@ -102,30 +102,47 @@ jobs:
       # Stopping a new pipeline run by using the "[skip ci]" as part of commit message
       #  --ignore-space-change --ignore-whitespace on the git apply allows for minor changes due to OS environment.
 
+#      - name: Applying git patch to branch
+#        id: update-bundle
+#        env:
+#          remoteChanges: ${{ needs.checkForChanges.outputs.remoteChanges }}
+#          latestDeploymentId: ${{ needs.preflight.outputs.latestDeployemntId }}
+#        if: ${{ env.remoteChanges == 'yes' }}
+#        run: |
+#          git config user.name github-actions
+#          git config user.email github-actions@github.com
+          # Check if the patch has been applied already, skip if it has
+#          if git apply ${{GITHUB.WORKSPACE}}/patch/git-patch.diff --reverse --ignore-space-change --ignore-whitespace --check; then
+#            echo "Patch already applied, exit"
+#            exit 0
+          # check if the patch can be applied
+#          elif git apply ${{GITHUB.WORKSPACE}}/patch/git-patch.diff --ignore-space-change --ignore-whitespace --check; then
+#            echo "Patch needed, trying now"
+#            git apply ${{GITHUB.WORKSPACE}}/patch/git-patch.diff --ignore-space-change --ignore-whitespace
+#            git add *
+#            git commit -m "Adding cloud changes since deployment ${{ env.latestDeploymentId }} [skip ci]"
+#            git push
+            # record the new sha for the deploy
+#            updatedSha=$(git rev-parse HEAD)
+#            echo "Updated SHA: $updatedSha"
+#            echo "updatedSha=$updatedSha" >> "$GITHUB_OUTPUT"
+#          fi
+#    outputs:
+#      newSha: ${{ steps.update-bundle.outputs.updatedSha }}
+
       - name: Applying git patch to branch
         id: update-bundle
         env:
           remoteChanges: ${{ needs.checkForChanges.outputs.remoteChanges }}
           latestDeploymentId: ${{ needs.preflight.outputs.latestDeployemntId }}
         if: ${{ env.remoteChanges == 'yes' }}
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          # Check if the patch has been applied already, skip if it has
-          if git apply ${{GITHUB.WORKSPACE}}/patch/git-patch.diff --reverse --ignore-space-change --ignore-whitespace --check; then
-            echo "Patch already applied, exit"
-            exit 0
-          # check if the patch can be applied
-          elif git apply ${{GITHUB.WORKSPACE}}/patch/git-patch.diff --ignore-space-change --ignore-whitespace --check; then
-            echo "Patch needed, trying now"
-            git apply ${{GITHUB.WORKSPACE}}/patch/git-patch.diff --ignore-space-change --ignore-whitespace
-            git add *
-            git commit -m "Adding cloud changes since deployment ${{ env.latestDeploymentId }} [skip ci]"
-            git push
-            # record the new sha for the deploy
-            updatedSha=$(git rev-parse HEAD)
-            echo "Updated SHA: $updatedSha"
-            echo "updatedSha=$updatedSha" >> "$GITHUB_OUTPUT"
-          fi
+        shell: bash
+        run: >
+          bash ${{GITHUB.WORKSPACE}}/.github/scripts/get_deployment_status.sh 
+          ${{ GITHUB.WORKSPACE }}/patch/git-patch.diff 
+          ${{ env.latestDeployemntId }} 
     outputs:
       newSha: ${{ steps.update-bundle.outputs.updatedSha }}
+
+
+          
