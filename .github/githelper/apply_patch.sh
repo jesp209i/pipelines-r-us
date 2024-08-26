@@ -16,16 +16,16 @@ if [[ -z "$gitUserEmail" ]]; then
     gitUserEmail="github-actions@github.com"
 fi
 
-git config user.name $githubUserName
-git config user.email $githubUserEmail
+git config user.name "$githubUserName"
+git config user.email "$githubUserEmail"
 # Check if the patch has been applied already, skip if it has
-if git apply $patchFile --reverse --ignore-space-change --ignore-whitespace --check; then
+if git apply "$patchFile" --reverse --ignore-space-change --ignore-whitespace --check; then
     echo "Patch already applied, exit"
     exit 0
 # check if the patch can be applied
-elif git apply $patchFile --ignore-space-change --ignore-whitespace --check; then
+elif git apply "$patchFile" --ignore-space-change --ignore-whitespace --check; then
     echo "Patch needed, trying now"
-    git apply $patchFile --ignore-space-change --ignore-whitespace
+    git apply "$patchFile" --ignore-space-change --ignore-whitespace
     git add *
     git commit -m "Adding cloud changes since deployment $latestDeploymentId [skip ci]"
     git push
