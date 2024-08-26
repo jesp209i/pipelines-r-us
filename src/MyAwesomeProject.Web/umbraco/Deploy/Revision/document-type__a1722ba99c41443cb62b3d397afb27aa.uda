@@ -19,6 +19,12 @@
       "Alias": "content",
       "PropertyTypes": [
         {
+          "Key": "bf469ab6-f173-40b2-aad1-2d02e76678c3",
+          "Alias": "article",
+          "DataType": "umb://data-type/ca90c9500aff4e72b976a30b1ac57dad",
+          "Name": "article"
+        },
+        {
           "Key": "ddb9a7ce-2445-44a7-a4ab-bf34a96db383",
           "Alias": "thisTitle",
           "DataType": "umb://data-type/0cc0eba1996042c9bf9b60e150b429ae",
@@ -32,6 +38,10 @@
   "Dependencies": [
     {
       "Udi": "umb://data-type/0cc0eba1996042c9bf9b60e150b429ae",
+      "Ordering": true
+    },
+    {
+      "Udi": "umb://data-type/ca90c9500aff4e72b976a30b1ac57dad",
       "Ordering": true
     },
     {
