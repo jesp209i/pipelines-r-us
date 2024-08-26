@@ -4,7 +4,7 @@ name: pipeline
 on:
   push:
     branches:
-      - main
+      - test
 
 jobs:
   # Try to sync the local repository to get up to speed with any changes in Cloud project
