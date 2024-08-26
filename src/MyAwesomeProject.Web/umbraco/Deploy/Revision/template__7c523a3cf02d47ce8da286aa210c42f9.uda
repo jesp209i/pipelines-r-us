@@ -1,0 +1,14 @@
+{
+  "Name": "Newest Doctype again",
+  "Alias": "NewestDoctypeAgain",
+  "File": "umb://template-file/NewestDoctypeAgain.cshtml",
+  "Udi": "umb://template/7c523a3cf02d47ce8da286aa210c42f9",
+  "Dependencies": [
+    {
+      "Udi": "umb://template-file/NewestDoctypeAgain.cshtml",
+      "Ordering": true
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.TemplateArtifact",
+  "__version": "13.1.0"
+}
