@@ -1,31 +1,25 @@
-name: (pwsh) 🚀 Umbraco Cloud Deployment pipeline
+name: pipeline
 
+# Trigger when committing to main branch
 on:
   push:
     branches:
-     - main
-  workflow_dispatch:
-    inputs:
-      perform_cloud_sync:
-        description: 'Run Sync operation First'
-        type: boolean
-        default: true
+      - main
 
 jobs:
+  # Try to sync the local repository to get up to speed with any changes in Cloud project
   cloud-sync:
-    name: "Syncronize with Cloud"
-    uses: ./.github/workflows/pwsh-cloud-sync.yml
-    if: ${{ GITHUB.EVENT_NAME == 'push' || ( GITHUB.EVENT_NAME == 'workflow_dispatch' && inputs.perform_cloud_sync == true) }}
-    secrets:
-      projectId: ${{ secrets.PROJECT_ID }}
-      umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}   
-
-  # Package and Deploy to Umbraco Cloud
-  cloud-deployment:
-    name: "Deploy to Cloud"
-    uses: ./.github/workflows/pwsh-cloud-deployment.yml
-    needs: cloud-sync
-    if: ${{ success() || ( GITHUB.EVENT_NAME == 'workflow_dispatch' && inputs.perform_cloud_sync == false) }}
+    uses: ./.github/workflows/cloud-sync.yml
     secrets:
       projectId: ${{ secrets.PROJECT_ID }}
       umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
+
+  # Package and Deploy to Umbraco Cloud
+  cloud-deployment:
+    needs: cloud-sync
+    uses: ./.github/workflows/cloud-deployment.yml
+    with:
+      newSha: ${{ needs.cloud-sync.outputs.newSha }}
+    secrets:
+      PROJECT_ID: ${{ secrets.PROJECT_ID }}
+      UMBRACO_CLOUD_API_KEY: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
