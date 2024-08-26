@@ -138,7 +138,7 @@ jobs:
         if: ${{ env.remoteChanges == 'yes' }}
         shell: bash
         run: >
-          bash ${{GITHUB.WORKSPACE}}/.github/scripts/get_deployment_status.sh 
+          bash ${{GITHUB.WORKSPACE}}/.github/githelper/apply_patch.sh 
           ${{ GITHUB.WORKSPACE }}/patch/git-patch.diff 
           ${{ env.latestDeployemntId }} 
     outputs:
