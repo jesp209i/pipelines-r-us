@@ -141,6 +141,8 @@ jobs:
           bash ${{GITHUB.WORKSPACE}}/.github/githelper/apply_patch.sh 
           ${{ GITHUB.WORKSPACE }}/patch/git-patch.diff 
           ${{ env.latestDeployemntId }} 
+          jam
+          jam@fakedomain.org
     outputs:
       newSha: ${{ steps.update-bundle.outputs.updatedSha }}
 
