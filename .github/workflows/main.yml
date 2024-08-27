@@ -25,10 +25,10 @@ jobs:
 
   # Package and Deploy to Umbraco Cloud
   cloud-deployment:
-    needs: cloud-sync
+#    needs: cloud-sync
     uses: ./.github/workflows/cloud-deployment.yml
-    with:
-      newSha: ${{ needs.cloud-sync.outputs.newSha }}
+#    with:
+#      newSha: ${{ needs.cloud-sync.outputs.newSha }}
     secrets:
       PROJECT_ID: ${{ secrets.PROJECT_ID }}
       UMBRACO_CLOUD_API_KEY: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
