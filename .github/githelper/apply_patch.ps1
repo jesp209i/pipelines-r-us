@@ -20,6 +20,12 @@ param (
     $GitUserEmail = "github-actions@github.com"
 )
 
+Write-Host "PatchFile: $PatchFile"
+Write-Host "LatestDeploymentId: $LatestDeploymentId"
+Write-Host "PipelineVendor: $PipelineVendor"
+Write-Host "GitUserName: $GitUserName"
+Write-Host "GitUserEmail: $GitUserEmail"
+
 
 git config user.name $GitUserName
 git config user.email $GitUserEmail
