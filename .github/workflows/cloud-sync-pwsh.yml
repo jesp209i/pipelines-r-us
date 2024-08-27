@@ -104,15 +104,17 @@ jobs:
         env:
           remoteChanges: ${{ needs.checkForChanges.outputs.remoteChanges }}
           latestDeploymentId: ${{ needs.preflight.outputs.latestDeploymentId }}
+          gitName: jesper
+          gitEmail: uc-patching-service@fakeemail.org
         if: ${{ env.remoteChanges == 'yes' }}
         shell: pwsh
         run: >
-          ${{GITHUB.WORKSPACE}}/.github/githelper/apply_patch.ps1
+          ${{GITHUB.WORKSPACE}}/.github/powershell/Apply-Patch.ps1
           -PatchFile ${{ GITHUB.WORKSPACE }}/patch/git-patch.diff 
           -LatestDeploymentId ${{ env.latestDeploymentId }} 
           -PipelineVendor GITHUB
-          -GitUserName "UC Patch back"
-          -GitUserEmail "uc-patching-service@fakeemail.org"
+          -GitUserName ${{ env.gitName }}
+          -GitUserEmail ${{ env.gitEmail }}
     outputs:
       newSha: ${{ steps.update-bundle.outputs.updatedSha }}
 
