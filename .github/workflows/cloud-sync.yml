@@ -34,7 +34,7 @@ jobs:
           GITHUB
 
     outputs:
-      latestDeployemntId: ${{ steps.latest-deployment.outputs.latestDeploymentId }}
+      latestDeploymentId: ${{ steps.latest-deployment.outputs.latestDeploymentId }}
 
   checkForChanges:
     name: Check if there are changes since latest deployment
@@ -47,7 +47,7 @@ jobs:
       # When "remoteChanges" is yes, there will also be downloaded a patch-file to the path you specified in -DownloadFolder parameter
       - name: Fetch Changes From Cloud
         env:
-          latestDeploymentId: ${{ needs.preflight.outputs.latestDeployemntId }}
+          latestDeploymentId: ${{ needs.preflight.outputs.latestDeploymentId }}
         if: ${{ env.latestDeploymentId != '' }}
         id: latest-changes
         shell: bash
@@ -106,7 +106,7 @@ jobs:
 #        id: update-bundle
 #        env:
 #          remoteChanges: ${{ needs.checkForChanges.outputs.remoteChanges }}
-#          latestDeploymentId: ${{ needs.preflight.outputs.latestDeployemntId }}
+#          latestDeploymentId: ${{ needs.preflight.outputs.latestDeploymentId }}
 #        if: ${{ env.remoteChanges == 'yes' }}
 #        run: |
 #          git config user.name github-actions
@@ -134,13 +134,13 @@ jobs:
 #        id: update-bundle
 #        env:
 #          remoteChanges: ${{ needs.checkForChanges.outputs.remoteChanges }}
-#          latestDeploymentId: ${{ needs.preflight.outputs.latestDeployemntId }}
+#          latestDeploymentId: ${{ needs.preflight.outputs.latestDeploymentId }}
 #        if: ${{ env.remoteChanges == 'yes' }}
 #        shell: bash
 #        run: >
 #          bash ${{GITHUB.WORKSPACE}}/.github/githelper/apply_patch.sh 
 #          ${{ GITHUB.WORKSPACE }}/patch/git-patch.diff 
-#          ${{ env.latestDeployemntId }} 
+#          ${{ env.latestDeploymentId }} 
 #          GITHUB
 #          "UC Patch back"
 #          "uc-patching-service@fakeemail.org"
@@ -149,13 +149,13 @@ jobs:
         id: update-bundle
         env:
           remoteChanges: ${{ needs.checkForChanges.outputs.remoteChanges }}
-          latestDeploymentId: ${{ needs.preflight.outputs.latestDeployemntId }}
+          latestDeploymentId: ${{ needs.preflight.outputs.latestDeploymentId }}
         if: ${{ env.remoteChanges == 'yes' }}
         shell: pwsh
         run: >
           ${{GITHUB.WORKSPACE}}/.github/githelper/apply_patch.ps1
           -PatchFile ${{ GITHUB.WORKSPACE }}/patch/git-patch.diff 
-          -LatestDeploymentId ${{ env.latestDeployemntId }} 
+          -LatestDeploymentId ${{ env.latestDeploymentId }} 
           -PipelineVendor GITHUB
           -GitUserName "UC Patch back"
           -GitUserEmail "uc-patching-service@fakeemail.org"
