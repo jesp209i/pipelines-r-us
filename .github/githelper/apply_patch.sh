@@ -19,10 +19,12 @@ fi
 
 git config user.name "$gitUserName"
 git config user.email "$gitUserEmail"
+
 # Check if the patch has been applied already, skip if it has
 if git apply "$patchFile" --reverse --ignore-space-change --ignore-whitespace --check; then
     echo "Patch already applied => concluding the apply patch part"
     exit 0
+
 # check if the patch can be applied
 elif git apply "$patchFile" --ignore-space-change --ignore-whitespace --check; then
     echo "Patch needed, trying now"
@@ -50,7 +52,7 @@ elif git apply "$patchFile" --ignore-space-change --ignore-whitespace --check; t
         Exit 1
     fi
 
-    # Handle the case where the patch cannot be applied
+# Handle the case where the patch cannot be applied
 else
     echo "Patch cannot be applied - please check the output below for the problematic parts"
     echo "================================================================================="

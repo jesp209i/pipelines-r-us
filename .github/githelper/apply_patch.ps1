@@ -20,13 +20,6 @@ param (
     $GitUserEmail = "github-actions@github.com"
 )
 
-Write-Host "PatchFile: $PatchFile"
-Write-Host "LatestDeploymentId: $LatestDeploymentId"
-Write-Host "PipelineVendor: $PipelineVendor"
-Write-Host "GitUserName: $GitUserName"
-Write-Host "GitUserEmail: $GitUserEmail"
-
-
 git config user.name $GitUserName
 git config user.email $GitUserEmail
 
@@ -63,6 +56,7 @@ elseif (git apply $PatchFile --ignore-space-change --ignore-whitespace --check) 
         }
     }
 }
+# Handle the case where the patch cannot be applied
 else {
 
     Write-Output "Patch cannot be applied - please check the output below for the problematic parts"
