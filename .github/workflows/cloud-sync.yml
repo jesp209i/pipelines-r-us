@@ -130,35 +130,35 @@ jobs:
 #    outputs:
 #      newSha: ${{ steps.update-bundle.outputs.updatedSha }}
 
-#      - name: Applying git patch to branch (bash)
-#        id: update-bundle
-#        env:
-#          remoteChanges: ${{ needs.checkForChanges.outputs.remoteChanges }}
-#          latestDeploymentId: ${{ needs.preflight.outputs.latestDeploymentId }}
-#        if: ${{ env.remoteChanges == 'yes' }}
-#        shell: bash
-#        run: >
-#          bash ${{GITHUB.WORKSPACE}}/.github/githelper/apply_patch.sh 
-#          ${{ GITHUB.WORKSPACE }}/patch/git-patch.diff 
-#          ${{ env.latestDeploymentId }} 
-#          GITHUB
-#          "UC Patch back"
-#          "uc-patching-service@fakeemail.org"
-
-      - name: Applying git patch to branch (pwsh)
+      - name: Applying git patch to branch (bash)
         id: update-bundle
         env:
           remoteChanges: ${{ needs.checkForChanges.outputs.remoteChanges }}
           latestDeploymentId: ${{ needs.preflight.outputs.latestDeploymentId }}
         if: ${{ env.remoteChanges == 'yes' }}
-        shell: pwsh
+        shell: bash
         run: >
-          ${{GITHUB.WORKSPACE}}/.github/githelper/apply_patch.ps1
-          -PatchFile ${{ GITHUB.WORKSPACE }}/patch/git-patch.diff 
-          -LatestDeploymentId ${{ env.latestDeploymentId }} 
-          -PipelineVendor GITHUB
-          -GitUserName "UC Patch back"
-          -GitUserEmail "uc-patching-service@fakeemail.org"
+          bash ${{GITHUB.WORKSPACE}}/.github/githelper/apply_patch.sh 
+          ${{ GITHUB.WORKSPACE }}/patch/git-patch.diff 
+          ${{ env.latestDeploymentId }} 
+          GITHUB
+          "UC Patch back"
+          "uc-patching-service@fakeemail.org"
+
+#      - name: Applying git patch to branch (pwsh)
+#        id: update-bundle
+#        env:
+#          remoteChanges: ${{ needs.checkForChanges.outputs.remoteChanges }}
+#          latestDeploymentId: ${{ needs.preflight.outputs.latestDeploymentId }}
+#        if: ${{ env.remoteChanges == 'yes' }}
+#        shell: pwsh
+#        run: >
+#          ${{GITHUB.WORKSPACE}}/.github/githelper/apply_patch.ps1
+#          -PatchFile ${{ GITHUB.WORKSPACE }}/patch/git-patch.diff 
+#          -LatestDeploymentId ${{ env.latestDeploymentId }} 
+#          -PipelineVendor GITHUB
+#          -GitUserName "UC Patch back"
+#          -GitUserEmail "uc-patching-service@fakeemail.org"
     outputs:
       newSha: ${{ steps.update-bundle.outputs.updatedSha }}
 
