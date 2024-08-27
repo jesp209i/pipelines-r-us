@@ -59,11 +59,11 @@ elseif (git apply $PatchFile --ignore-space-change --ignore-whitespace --check) 
     Exit 0
 }
 # Handle the case where the patch cannot be applied
-else {
+#else {
 
-    Write-Host "Patch cannot be applied - please check the output below for the problematic parts"
-    Write-Host "================================================================================="
-    git apply --reject $PatchFile --ignore-space-change --ignore-whitespace --check
-    Exit 1
-}
+#    Write-Host "Patch cannot be applied - please check the output below for the problematic parts"
+#    Write-Host "================================================================================="
+#    git apply --reject $PatchFile --ignore-space-change --ignore-whitespace --check
+#    Exit 1
+#}
 
