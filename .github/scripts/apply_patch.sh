@@ -20,15 +20,17 @@ fi
 git config user.name "$gitUserName"
 git config user.email "$gitUserEmail"
 
-echo "Testing the patch"
+echo "Testing the patch - errors might show up, and that is okay"
+echo "=========================================================="
 # Check if the patch has been applied already, skip if it has
 if git apply "$patchFile" --reverse --ignore-space-change --ignore-whitespace --check; then
-    echo "Patch already applied => concluding the apply patch part"
+    echo "Patch already applied === concluding the apply patch part"
     exit 0
 
 # check if the patch can be applied
 elif git apply "$patchFile" --ignore-space-change --ignore-whitespace --check; then
-    echo "Patch needed, trying now"
+    echo "Patch needed, trying to apply now"
+    echo "================================="
     git apply "$patchFile" --ignore-space-change --ignore-whitespace
     git add *
     git commit -m "Adding cloud changes since deployment $latestDeploymentId [skip ci]"

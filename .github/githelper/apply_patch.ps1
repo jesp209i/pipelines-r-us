@@ -25,12 +25,16 @@ git config user.email $GitUserEmail
 
 Write-Host "Testing the patch"
 # Check if the patch has been applied already, skip if it has
-if (git apply $PatchFile --reverse --ignore-space-change --ignore-whitespace --check) {
+If (git apply $PatchFile --reverse --ignore-space-change --ignore-whitespace --check) {
     Write-Host "Patch already applied => concluding the apply patch part"
     Exit 0
+} Else {
+    Write-Host "Patch not applied yet"
 }
+
+Write-Host "Checking if patch can be applied..."
 # Check if the patch can be applied
-elseif (git apply $PatchFile --ignore-space-change --ignore-whitespace --check) {
+If (&git apply $PatchFile --ignore-space-change --ignore-whitespace --check) {
     Write-Host "Patch needed, trying now"
     git apply $PatchFile --ignore-space-change --ignore-whitespace
     git add *
@@ -57,13 +61,11 @@ elseif (git apply $PatchFile --ignore-space-change --ignore-whitespace --check) 
         }
     }
     Exit 0
+} Else {
+    Write-Host ""
+    Write-Host "Patch cannot be applied - please check the output below for the problematic parts"
+    Write-Host "================================================================================="
+    git apply --reject $PatchFile --ignore-space-change --ignore-whitespace --check
+    Exit 1
 }
-# Handle the case where the patch cannot be applied
-#else {
-
-#    Write-Host "Patch cannot be applied - please check the output below for the problematic parts"
-#    Write-Host "================================================================================="
-#    git apply --reject $PatchFile --ignore-space-change --ignore-whitespace --check
-#    Exit 1
-#}
 

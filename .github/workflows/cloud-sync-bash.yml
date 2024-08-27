@@ -104,15 +104,17 @@ jobs:
         env:
           remoteChanges: ${{ needs.checkForChanges.outputs.remoteChanges }}
           latestDeploymentId: ${{ needs.preflight.outputs.latestDeploymentId }}
+          gitName: jesper
+          gitEmail: uc-patching-service@fakeemail.org
         if: ${{ env.remoteChanges == 'yes' }}
         shell: bash
         run: >
-          bash ${{GITHUB.WORKSPACE}}/.github/githelper/apply_patch.sh 
+          bash ${{GITHUB.WORKSPACE}}/.github/scripts/apply_patch.sh 
           ${{ GITHUB.WORKSPACE }}/patch/git-patch.diff 
           ${{ env.latestDeploymentId }} 
           GITHUB
-          "UC Patch back"
-          "uc-patching-service@fakeemail.org"
+          ${{ env.gitName }} 
+          ${{ env.gitEmail }} 
 
     outputs:
       newSha: ${{ steps.update-bundle.outputs.updatedSha }}
