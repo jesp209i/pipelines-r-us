@@ -46,6 +46,13 @@
           "Name": "article"
         },
         {
+          "Key": "bfa82dca-16dc-42af-ad77-3078c81e7ffa",
+          "Alias": "dateThing",
+          "DataType": "umb://data-type/5046194e4237453ca54715db3a07c4e1",
+          "Name": "Date thing",
+          "SortOrder": 5
+        },
+        {
           "Key": "ddb9a7ce-2445-44a7-a4ab-bf34a96db383",
           "Alias": "thisTitle",
           "DataType": "umb://data-type/0cc0eba1996042c9bf9b60e150b429ae",
@@ -68,6 +75,10 @@
     },
     {
       "Udi": "umb://data-type/2e6d3631066e44b8aec496f09099b2b5",
+      "Ordering": true
+    },
+    {
+      "Udi": "umb://data-type/5046194e4237453ca54715db3a07c4e1",
       "Ordering": true
     },
     {
