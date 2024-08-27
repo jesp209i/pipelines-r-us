@@ -17,12 +17,6 @@ if [[ -z "$gitUserEmail" ]]; then
     gitUserEmail="github-actions@github.com"
 fi
 
-echo "PatchFile: $patchFile"
-echo "LatestDeploymentId: $latestDeploymentId"
-echo "PipelineVendor: $pipelineVendor"
-echo "GitUserName: $gitUserName"
-echo "GitUserEmail: $gitUserEmail"
-
 git config user.name "$gitUserName"
 git config user.email "$gitUserEmail"
 # Check if the patch has been applied already, skip if it has

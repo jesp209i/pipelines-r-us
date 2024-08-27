@@ -19,6 +19,13 @@
       "Alias": "content",
       "PropertyTypes": [
         {
+          "Key": "11ed2fd4-c324-4c42-be55-92afedad75fb",
+          "Alias": "numbersGame",
+          "DataType": "umb://data-type/2e6d3631066e44b8aec496f09099b2b5",
+          "Name": "Numbers Game",
+          "SortOrder": 3
+        },
+        {
           "Key": "7de2a1ae-63d0-48ef-b55f-dde241a2a012",
           "Alias": "togle",
           "DataType": "umb://data-type/00171f5c0e174903b6a51a437cb3f708",
@@ -50,6 +57,10 @@
     },
     {
       "Udi": "umb://data-type/0cc0eba1996042c9bf9b60e150b429ae",
+      "Ordering": true
+    },
+    {
+      "Udi": "umb://data-type/2e6d3631066e44b8aec496f09099b2b5",
       "Ordering": true
     },
     {
