@@ -26,13 +26,6 @@
           "SortOrder": 3
         },
         {
-          "Key": "4506b64c-b695-41ee-b937-b11d8ce3b277",
-          "Alias": "textboxString",
-          "DataType": "umb://data-type/0cc0eba1996042c9bf9b60e150b429ae",
-          "Name": "Textbox string",
-          "SortOrder": 4
-        },
-        {
           "Key": "7de2a1ae-63d0-48ef-b55f-dde241a2a012",
           "Alias": "togle",
           "DataType": "umb://data-type/00171f5c0e174903b6a51a437cb3f708",
