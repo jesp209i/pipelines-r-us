@@ -7,7 +7,7 @@
       "Workspaces": [
         {
           "Id": "6fb17a66-611d-4068-a95b-2f2aaddace09",
-          "Name": "DevelopmentHest",
+          "Name": "Development",
           "Type": "development",
           "Url": "https://dev-pipelines-r-us.euwest01.umbraco.io"
         },
