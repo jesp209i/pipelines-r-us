@@ -63,7 +63,7 @@ try {
         }
 
         Write-Host "Deployment Created Successfully => $($deploymentId)"
-        exit 0
+        Exit 0
     }
 
     Write-Host "---Response Start---"

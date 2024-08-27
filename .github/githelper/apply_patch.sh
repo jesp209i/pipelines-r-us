@@ -20,6 +20,7 @@ fi
 git config user.name "$gitUserName"
 git config user.email "$gitUserEmail"
 
+echo "Testing the patch"
 # Check if the patch has been applied already, skip if it has
 if git apply "$patchFile" --reverse --ignore-space-change --ignore-whitespace --check; then
     echo "Patch already applied => concluding the apply patch part"

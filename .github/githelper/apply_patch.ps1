@@ -23,21 +23,22 @@ param (
 git config user.name $GitUserName
 git config user.email $GitUserEmail
 
+Write-Host "Testing the patch"
 # Check if the patch has been applied already, skip if it has
 if (git apply $PatchFile --reverse --ignore-space-change --ignore-whitespace --check) {
-    Write-Output "Patch already applied => concluding the apply patch part"
-    exit 0
+    Write-Host "Patch already applied => concluding the apply patch part"
+    Exit 0
 }
 # Check if the patch can be applied
 elseif (git apply $PatchFile --ignore-space-change --ignore-whitespace --check) {
-    Write-Output "Patch needed, trying now"
+    Write-Host "Patch needed, trying now"
     git apply $PatchFile --ignore-space-change --ignore-whitespace
     git add *
     git commit -m "Adding cloud changes since deployment $LatestDeploymentId [skip ci]"
     git push
     # Record the new sha for the deploy
     $updatedSha = git rev-parse HEAD
-    Write-Output "Updated SHA: $updatedSha"
+    Write-Host "Updated SHA: $updatedSha"
 
     switch ($PipelineVendor) {
         "GITHUB" {
@@ -55,13 +56,14 @@ elseif (git apply $PatchFile --ignore-space-change --ignore-whitespace --check) 
             Exit 1
         }
     }
+    Exit 0
 }
 # Handle the case where the patch cannot be applied
 else {
 
-    Write-Output "Patch cannot be applied - please check the output below for the problematic parts"
-    Write-Output "================================================================================="
+    Write-Host "Patch cannot be applied - please check the output below for the problematic parts"
+    Write-Host "================================================================================="
     git apply --reject $PatchFile --ignore-space-change --ignore-whitespace --check
-    exit 1
+    Exit 1
 }
 
