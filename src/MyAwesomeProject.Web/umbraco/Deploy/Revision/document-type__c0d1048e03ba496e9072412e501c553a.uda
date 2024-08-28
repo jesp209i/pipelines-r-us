@@ -19,13 +19,6 @@
       "Alias": "hollnad",
       "PropertyTypes": [
         {
-          "Key": "7a82b7ef-cf5f-41b9-b430-119bcf5b51b2",
-          "Alias": "justToBeAnnoying",
-          "DataType": "umb://data-type/c6bac0dd4ab945b18e30e4b619ee5da3",
-          "Name": "just to be annoying",
-          "SortOrder": 1
-        },
-        {
           "Key": "95869e1e-b771-4c43-a818-ecc72c63cb04",
           "Alias": "colors",
           "DataType": "umb://data-type/0225af17b30249cb9176b9f35cab9c17",
@@ -39,10 +32,6 @@
   "Dependencies": [
     {
       "Udi": "umb://data-type/0225af17b30249cb9176b9f35cab9c17",
-      "Ordering": true
-    },
-    {
-      "Udi": "umb://data-type/c6bac0dd4ab945b18e30e4b619ee5da3",
       "Ordering": true
     },
     {
