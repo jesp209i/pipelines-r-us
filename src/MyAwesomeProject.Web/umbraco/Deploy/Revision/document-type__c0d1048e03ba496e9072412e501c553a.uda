@@ -1,0 +1,44 @@
+{
+  "Name": "Yolo",
+  "Alias": "yolo",
+  "DefaultTemplate": "umb://template/874eebd9692d4426b8ed199277f072ba",
+  "AllowedTemplates": [
+    "umb://template/874eebd9692d4426b8ed199277f072ba"
+  ],
+  "HistoryCleanup": {},
+  "Icon": "icon-document",
+  "Thumbnail": "folder.png",
+  "Permissions": {
+    "AllowedChildContentTypes": []
+  },
+  "CompositionContentTypes": [],
+  "PropertyGroups": [
+    {
+      "Key": "852ce935-c9a3-44f5-8f5a-21fa8adda8ff",
+      "Name": "Hollnad",
+      "Alias": "hollnad",
+      "PropertyTypes": [
+        {
+          "Key": "95869e1e-b771-4c43-a818-ecc72c63cb04",
+          "Alias": "colors",
+          "DataType": "umb://data-type/0225af17b30249cb9176b9f35cab9c17",
+          "Name": "colors"
+        }
+      ]
+    }
+  ],
+  "PropertyTypes": [],
+  "Udi": "umb://document-type/c0d1048e03ba496e9072412e501c553a",
+  "Dependencies": [
+    {
+      "Udi": "umb://data-type/0225af17b30249cb9176b9f35cab9c17",
+      "Ordering": true
+    },
+    {
+      "Udi": "umb://template/874eebd9692d4426b8ed199277f072ba",
+      "Ordering": true
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.ContentType.DocumentTypeArtifact",
+  "__version": "13.2.0"
+}

@@ -1,0 +1,14 @@
+{
+  "Name": "ytutyrutyu",
+  "Alias": "ytutyrutyu",
+  "File": "umb://template-file/ytutyrutyu.cshtml",
+  "Udi": "umb://template/467aa486bf814ee4b59cfe3b342a1e5d",
+  "Dependencies": [
+    {
+      "Udi": "umb://template-file/ytutyrutyu.cshtml",
+      "Ordering": true
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.TemplateArtifact",
+  "__version": "13.2.0"
+}
