@@ -16,7 +16,8 @@ jobs:
   # Try to sync the local repository to get up to speed with any changes in Cloud project
   cloud-sync:
     name: "Syncronize with Cloud"
-    uses: ./.github/workflows/cloud-sync-bash.yml
+    #uses: ./.github/workflows/cloud-sync-bash.yml
+    uses: ./.github/workflows/cloud-sync-pwsh.yml
     if: ${{ GITHUB.EVENT_NAME == 'push' || ( GITHUB.EVENT_NAME == 'workflow_dispatch' && inputs.perform_cloud_sync == true) }}
     secrets:
       projectId: ${{ secrets.PROJECT_ID }}
