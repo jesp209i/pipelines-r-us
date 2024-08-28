@@ -1,0 +1,14 @@
+{
+  "Name": "Yolo",
+  "Alias": "Yolo",
+  "File": "umb://template-file/Yolo.cshtml",
+  "Udi": "umb://template/874eebd9692d4426b8ed199277f072ba",
+  "Dependencies": [
+    {
+      "Udi": "umb://template-file/Yolo.cshtml",
+      "Ordering": true
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.TemplateArtifact",
+  "__version": "13.2.0"
+}
