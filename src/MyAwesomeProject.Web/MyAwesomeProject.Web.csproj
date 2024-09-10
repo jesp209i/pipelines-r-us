@@ -6,20 +6,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Umbraco.Cloud.Cms.PublicAccess" Version="13.0.0" />
-    <PackageReference Include="Umbraco.Cloud.Identity.Cms" Version="13.0.1" />
-    <PackageReference Include="Umbraco.Cloud.StorageProviders.AzureBlob" Version="13.0.1" />
-    <PackageReference Include="Umbraco.Cms" Version="13.4.0" />
-    <PackageReference Include="Umbraco.Deploy.Cloud" Version="13.2.0" />
-    <PackageReference Include="Umbraco.Deploy.Contrib" Version="13.0.0" />
-    <PackageReference Include="Umbraco.Forms.Deploy" Version="13.0.0" />
-    <PackageReference Include="Umbraco.Forms" Version="13.1.2" />
-    <PackageReference Include="Umbraco.Cloud.Cms" Version="13.0.0--alpha.preview.6.gccf1352" />
+    <PackageReference Include="Umbraco.Cloud.Cms.PublicAccess" />
+    <PackageReference Include="Umbraco.Cloud.Identity.Cms" />
+    <PackageReference Include="Umbraco.Cloud.StorageProviders.AzureBlob" />
+    <PackageReference Include="Umbraco.Cms" />
+    <PackageReference Include="Umbraco.Deploy.Cloud" />
+    <PackageReference Include="Umbraco.Deploy.Contrib" />
+    <PackageReference Include="Umbraco.Forms.Deploy" />
+    <PackageReference Include="Umbraco.Forms" />
+    <PackageReference Include="Umbraco.Cloud.Cms" />
   </ItemGroup>
 
   <ItemGroup>
     <!-- Opt-in to app-local ICU to ensure consistent globalization APIs across different platforms -->
-    <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" Version="68.2.0.9" />
+    <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" />
     <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="68.2.0.9" Condition="$(RuntimeIdentifier.StartsWith('linux')) or $(RuntimeIdentifier.StartsWith('win')) or ('$(RuntimeIdentifier)' == '' and !$([MSBuild]::IsOSPlatform('osx')))" />
   </ItemGroup>
 
