@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <ManagePackageVersionCentrally>true</ManagePackageVersionCentrally>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
 <ItemGroup>
     <PackageVersion Include="Umbraco.Cloud.Cms.PublicAccess" Version="13.0.0" />
