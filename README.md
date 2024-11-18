@@ -20,7 +20,6 @@ Note: When running locally, we recommend that you setup a developer certificate 
 dotnet dev-certs https --trust
 ```
 
-
 ## Developing Locally
 
 All you need to know to run your Umbraco Cloud project locally.
