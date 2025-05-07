@@ -106,7 +106,7 @@ jobs:
               Write-Host "See errors above"
               exit 1
           }
-          git apply ${{GITHUB.WORKSPACE}}/patch/git-patch.diff --ignore-space-change --ignore-whitespace --allow-empty
+          git apply ${{GITHUB.WORKSPACE}}/patch/git-patch.diff --ignore-space-change --ignore-whitespace
           git add *
           git commit -m "Adding cloud changes since deployment ${{ env.latestDeploymentId }} [skip ci]"
           git push
